@@ -1,0 +1,11 @@
+Model Information:
+* title:	SONY headphone WH-1000XM4
+* source:	https://sketchfab.com/3d-models/sony-headphone-wh-1000xm4-f90f76c75d8143eb97eb49844050aa26
+* author:	Chizuko V (https://sketchfab.com/chizuk0)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "SONY headphone WH-1000XM4" (https://sketchfab.com/3d-models/sony-headphone-wh-1000xm4-f90f76c75d8143eb97eb49844050aa26) by Chizuko V (https://sketchfab.com/chizuk0) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

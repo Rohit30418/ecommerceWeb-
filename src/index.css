@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,body{
+  overflow-x:hidden;
+   width:100%;
+  font-family: 'Baleny Script Reguler', sans-serif;
+}
+
+.card-loader {
+  background-color: #fff;
+  box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 -1px 3px 0 rgba(0,0,0,0.06);
+  padding: 8px;
+  position: relative;
+  border-radius: 2px;
+  margin-bottom: 0;
+  height: 200px;
+  overflow: hidden;
+
+  &:only-child {
+    margin-top:0;
+  }
+
+  &:before {
+    content: '';
+    height: 110px;
+    display: block;
+    background-color: #ededed;
+    box-shadow: -48px 78px 0 -48px #ededed, -51px 102px 0 -51px #ededed;
+  }
+
+  &:after {
+    content: '';
+    background-color: #333;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation-duration: 0.6s;
+    animation-iteration-count: infinite;
+    animation-name: loader-animate;
+    animation-timing-function: linear;
+    background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0) 81%);
+    background: -o-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0) 81%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0) 81%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#00ffffff',GradientType=1 );
+  }
+}
+ 
+
+// Loader animation
+@keyframes loader-animate{
+ 0%{
+    transform: translate3d(-100%, 0, 0);
+  }
+ 100%{
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+
+
+.dropmenu:hover .dropdown{
+  display:block 
+}
+
+.header{
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgb(244 34 34 / 75%);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+
+
+
+.footer {
+  position: relative;
+  min-height: 100px;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top:30px;
+}
+
+.social-icon,
+.menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.social-icon__item,
+.menu__item {
+  list-style: none;
+}
+
+.social-icon__link {
+  font-size: 2rem;
+  color: #fff;
+  margin: 0 10px;
+  display: inline-block;
+  transition: 0.5s;
+}
+.social-icon__link:hover {
+  transform: translateY(-10px);
+}
+
+.menu__link {
+  font-size: 1.2rem;
+  color: #fff;
+  margin: 0 10px;
+  display: inline-block;
+  transition: 0.5s;
+  text-decoration: none;
+  opacity: 0.75;
+  font-weight: 300;
+}
+.menu__link:hover{
+	color: white;
+}
+
+.menu__link:hover {
+  opacity: 1;
+}
+
+.footer p {
+  color: #fff;
+  margin: 15px 0 10px 0;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.pattern{
+  background-image:url('https://www.fhrai.com/Demo/images/newWebsiteImages/light-pattern.png');
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-position:center;
+}
+
+
+
+
+.dropdown {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+
+
+
+.container{
+  max-width:1170px;
+  margin:auto;
+}
+
+
+@media(min-width:992px){
+  .dropmenu:hover  .dropdown{
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+}
+
+@media(max-width:992px){
+
+   
+
+  .dropdown{
+    visibility:visible;
+    opacity:1;
+    display:none;
+    position:static;
+    transform: translateY(0px);
+    width:100%;
+  }
+
+  .dropdown.active {
+    display:block;
+    }
+
+
+    .dropmenu{
+      width:100%;
+    }
+}
