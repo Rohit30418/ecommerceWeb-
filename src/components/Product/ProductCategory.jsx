@@ -10,158 +10,236 @@ import Cardloader from './Cardloader';
 
 const ProductCategory = () => {
   const [category, setCategory] = useState([]);
-  const [pageNo,setPageNo]=useState(1);
+  const [pageNo, setPageNo] = useState(1);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedStar, setSelectedStar] = useState([]);
+  const [isOverlayActive, setIsOverlayActive] = useState(false);
+  const [isMobileSortActive, setIsmobileShortActive] = useState(false);
+  const [isMobileFilterActive, setIsmobileFilterActive] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [tempStar, setTempStar] = useState([]);
+  const [tempRange, setTempRange] = useState([0, 0]);
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(0);
-  const { loading, response, error, apidata } = fetchApi();
+  const { loading, response, apidata } = fetchApi();
   const color = useSelector((state) => state.color.color);
   const { Category } = useParams();
-  const darkColor=useSelector((state)=>state?.DarkColor?.DarkColor)
+  const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
 
   useEffect(() => {
     apidata(`products/category/${Category}`);
   }, [Category]);
 
   useEffect(() => {
-    if (response) {
-      setData(response.products || []);
-      setFilteredData(response.products || []);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
 
-      // Extract categories from products and remove duplicates
-      const categories = [...new Set(response?.products?.map(item => item.category))];
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (response) {
+      const products = response.products || [];
+      setData(products);
+      setFilteredData(products);
+
+      const categories = [...new Set(products.map(item => item.category))];
       setCategory(categories);
 
-      // Setting max and min price values
-      const maxPrice = Math.floor(Math.max(...response?.products?.map(product =>( product?.price*(1-product.discountPercentage / 100)))) * 85);
-      setMaxVal(maxPrice);
+      const prices = products.map(p => p.price * (1 - p.discountPercentage / 100) * 85);
+      const maxPrice = Math.floor(Math.max(...prices));
+      const minPrice = Math.floor(Math.min(...prices));
 
-      const minPrice = Math.floor(Math.min(...response?.products?.map(product => product?.price*(1-product.discountPercentage / 100))) * 85);
+      setMaxVal(maxPrice);
       setMinVal(minPrice);
+      setTempRange([minPrice, maxPrice]);
     }
   }, [response]);
 
-  const handalerangeVal = (value) => {
+  const handleRangeChange = (value) => {
     if (!data) return;
-    console.log(value);
-
-    const filtered = data.filter((item) => ((item.price *(1-item.discountPercentage / 100)* 85)) >= value[0] && item.price *(1-item.discountPercentage / 100)* 85 <= value[1]);
+    const filtered = data.filter(item =>
+      item.price * (1 - item.discountPercentage / 100) * 85 >= value[0] &&
+      item.price * (1 - item.discountPercentage / 100) * 85 <= value[1]
+    );
     setFilteredData(filtered);
   };
 
-
-
-  const lowTohighPrice = () => {
-    if (!data) return;
-    const sorted = [...filteredData].sort((a, b) => (a.price * (1 - a.discountPercentage / 100)) - (b.price * (1 - b.discountPercentage / 100)));
+  const lowToHighPrice = () => {
+    const sorted = [...filteredData].sort((a, b) =>
+      a.price * (1 - a.discountPercentage / 100) - b.price * (1 - b.discountPercentage / 100)
+    );
     setFilteredData(sorted);
+    closeOverlay();
   };
 
-  const highTolowPrice = () => {
-    if (!data) return;
-    const sorted = [...filteredData].sort((a, b) => (b.price * (1 - b.discountPercentage / 100)) - (a.price * (1 - a.discountPercentage / 100)));
+  const highToLowPrice = () => {
+    const sorted = [...filteredData].sort((a, b) =>
+      b.price * (1 - b.discountPercentage / 100) - a.price * (1 - a.discountPercentage / 100)
+    );
     setFilteredData(sorted);
+    closeOverlay();
   };
 
-  const StarFilter = (val) => {
-    let newSelectedStar;
-    if (selectedStar?.includes(val)) {
-      newSelectedStar = selectedStar.filter(star => star !== val);
-    } else {
-      newSelectedStar = [...selectedStar, val];
-    }
-    setSelectedStar(newSelectedStar);
+  const toggleStarFilter = (val) => {
+    const list = isMobile ? tempStar : selectedStar;
+    const updated = list.includes(val)
+      ? list.filter(s => s !== val)
+      : [...list, val];
+
+    isMobile ? setTempStar(updated) : setSelectedStar(updated);
+  };
+
+  const handleRangeSlider = (val) => {
+    isMobile ? setTempRange(val) : handleRangeChange(val);
   };
 
   const handleCategory = (categoryName) => {
-    const categoryFilter = data?.filter((item) => item.category === categoryName);
-    setFilteredData(categoryFilter);
+    const filtered = data.filter(item => item.category === categoryName);
+    setFilteredData(filtered);
   };
 
   useEffect(() => {
-    let updatedFilteredData = data;
+    let result = data;
     if (selectedStar.length > 0) {
-      updatedFilteredData = updatedFilteredData.filter(item => selectedStar.includes(Math.floor(item.rating)));
+      result = result.filter(item =>
+        selectedStar.includes(Math.floor(item.rating))
+      );
     }
-    setFilteredData(updatedFilteredData);
+    setFilteredData(result);
   }, [selectedStar, data]);
-
 
   const totalPages = Math.ceil(filteredData.length / 6);
 
- 
+  const handleApplyFilter = () => {
+    setSelectedStar(tempStar);
+    handleRangeChange(tempRange);
+    closeOverlay();
+  };
 
+  const handleClearFilter = () => {
+    if (isMobile) {
+      setTempStar([]);
+      setTempRange([minVal, maxVal]);
+    } else {
+      setSelectedStar([]);
+      handleRangeChange([minVal, maxVal]);
+    }
+  };
+
+  const openSortMobile = () => {
+    setIsOverlayActive(true);
+    setIsmobileShortActive(true);
+  };
+
+  const openFilterMobile = () => {
+    setIsOverlayActive(true);
+    setIsmobileFilterActive(true);
+  };
+
+  const closeOverlay = () => {
+    setIsOverlayActive(false);
+    setIsmobileShortActive(false);
+    setIsmobileFilterActive(false);
+  };
 
   return (
     <>
-      <Header />
-      <div className='flex md:flex-row flex-col pt-20'>
-        <div className='md:w-3/12 shadow-lg rounded-lg px-4'>
-          <h2 className='text-2xl mb-5 font-bold' style={{ 'color': `${darkColor}` }}>Filter <i class="fas fa-filter"></i></h2>
-          <h4 className='font-bold text-lg' style={{ 'color': `${darkColor}` }}>Price</h4>
-          <RangeSlider max={maxVal} min={minVal} handalerangeVal={handalerangeVal} />
-          <h4 className='font-bold text-lg' style={{ 'color': `${darkColor}` }}>Sort By</h4>
-          <button className='block' onClick={lowTohighPrice}>Price Low to High  <i class="fa-solid fa-arrow-up"></i></button>
-          <button className='block' onClick={highTolowPrice}>Price High to Low <i class="fa-solid fa-arrow-down"></i></button>
-          <h4 className='font-bold text-lg mt-3' style={{ 'color': `${darkColor}` }}>Customer Rating</h4>
-          <div>
-            <input onChange={() => { StarFilter(4) }} type="checkbox" id="4star" /> <label htmlFor="4star"><i class="fa-solid fa-star text-orange-600"></i> <i class="fa-solid fa-star text-orange-600"></i> <i class="fa-solid fa-star text-orange-600"></i> <i class="fa-solid fa-star text-orange-600"></i></label>
+      {isOverlayActive && (
+        <span
+          onClick={closeOverlay}
+          className="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-65 z-30"
+        />
+      )}
+
+      <div className="flex lg:hidden justify-center py-3 gap-4">
+        <button className="border p-2" onClick={openSortMobile}>
+          Sort <i className="fa-solid fa-arrow-up"></i> <i className="fa-solid fa-arrow-down"></i>
+        </button>
+        <button className="border p-2" onClick={openFilterMobile}>
+          Filter <i className="fas fa-filter"></i>
+        </button>
+      </div>
+
+      <div className="flex md:flex-row flex-col pt-2 lg:pt-20">
+        {/* Filter Panel */}
+        <div className="md:w-3/12 shadow-lg rounded-lg px-4">
+          <div className={`${isMobileFilterActive ? "translate-x-0" : "translate-x-full"} fixed lg:static top-0 bottom-0 bg-white lg:translate-x-[0%] right-0 p-4 w-7/12 lg:w-12/12 z-40 transition ease-in-out duration-300`}>
+            <h4 className="font-bold text-lg" style={{ color: darkColor }}>Price</h4>
+            <RangeSlider max={maxVal} min={minVal} handalerangeVal={handleRangeSlider} />
+
+            <h4 className="font-bold text-lg mt-3" style={{ color: darkColor }}>Customer Rating</h4>
+            {[4, 3, 2].map((star) => (
+              <div className='flex gap-2' key={star}>
+                <input
+                  checked={(isMobile ? tempStar : selectedStar).includes(star)}
+                  onChange={() => toggleStarFilter(star)}
+                  type="checkbox"
+                  id={`${star}star`}
+                />
+
+                <label htmlFor={`${star}star`}>
+                  {Array(star).fill().map((_, i) => (
+                    <i key={i} className="fa-solid fa-star text-orange-600"></i>
+                  ))}
+                </label>
+              </div>
+            ))}
+
+            <div className="mt-4 lg:hidden">
+              <button className="bg-red-500 p-2 mr-2" onClick={handleApplyFilter}>Apply</button>
+              <button className="bg-green-500 p-2" onClick={handleClearFilter}>Clear</button>
+            </div>
           </div>
-          <div>
-            <input onChange={() => { StarFilter(3) }} type="checkbox" id="3star" /> <label htmlFor="3star">
-            <i class="fa-solid fa-star text-orange-600"></i> <i class="fa-solid fa-star text-orange-600"></i> <i class="fa-solid fa-star text-orange-600"></i>
-            </label>
-          </div>
-          <div>
-            <input onChange={() => { StarFilter(2) }} type="checkbox" id="2star" /> <label htmlFor="2star"><i class="fa-solid fa-star text-orange-600"></i> <i class="fa-solid fa-star text-orange-600"></i></label>
-          </div>
+
+           {/* Sort Panel */}
+        <div className={`fixed lg:static ${isMobileSortActive ? "translate-y-0" : "translate-y-full"} bottom-0 bg-white shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md transition ease-in-out duration-300 p-3`}>
+          <button className="block mb-4" onClick={lowToHighPrice}>
+            Price Low to High <i className="fa-solid fa-arrow-up"></i>
+          </button>
+          <button className="block" onClick={highToLowPrice}>
+            Price High to Low <i className="fa-solid fa-arrow-down"></i>
+          </button>
+        </div>
         </div>
 
-
-           {
-            loading? <div className='grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4  md:w-9/12'>
-      
-      
-            <Cardloader></Cardloader>
-            <Cardloader></Cardloader>
-            <Cardloader></Cardloader>
-            <Cardloader></Cardloader>
-            <Cardloader></Cardloader>
-            <Cardloader></Cardloader>
-            <Cardloader></Cardloader>
-            
-            </div>: <div className='flex flex-wrap md:w-9/12'>
-          {filteredData.slice(pageNo*6-6,pageNo*6).map((item) => (
-            <ProductCard key={item.id} item={item} />
-          ))}
-        </div>
-           }
-
-     
-    
        
 
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 md:w-9/12">
+          {loading ? (
+            Array(6).fill().map((_, i) => <Cardloader key={i} />)
+          ) : (
+            filteredData.slice((pageNo - 1) * 6, pageNo * 6).map((item) => (
+              <ProductCard key={item.id} item={item} />
+            ))
+          )}
+        </div>
       </div>
-      
-      {filteredData.length>6 && <div className="flex gap-5 justify-center mt-4">
-           {pageNo>1 && <button onClick={()=>{
-            setPageNo(pageNo-1)
-           }}>Prev</button>} 
-            {[...Array(totalPages)].map((_,ind)=>{
-              return <button onClick={()=>{
-                setPageNo(ind+1)
-              }} className={`p-2 rounded-sm ${ind+1==pageNo?"bg-green-500":"bg-red-600"}`}>{ind+1}</button>
-            })}
-           {pageNo<totalPages && <button onClick={()=>{
-              setPageNo(pageNo+1)
-            }}>next</button> }
-            </div>}
-            
-      <Footer />
+
+      {/* Pagination */}
+      {filteredData.length > 6 && (
+        <div className="flex gap-5 justify-center mt-4">
+          {pageNo > 1 && <button onClick={() => setPageNo(pageNo - 1)}>Prev</button>}
+          {[...Array(totalPages)].map((_, ind) => (
+            <button
+              key={ind}
+              onClick={() => setPageNo(ind + 1)}
+              className={`p-2 ${pageNo === ind + 1 ? 'bg-blue-500 text-white' : ''}`}
+            >
+              {ind + 1}
+            </button>
+          ))}
+          {pageNo < totalPages && <button onClick={() => setPageNo(pageNo + 1)}>Next</button>}
+        </div>
+      )}
     </>
   );
 };
 
 export default ProductCategory;
+

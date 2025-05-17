@@ -62,7 +62,7 @@ const ProductCard = ({ item }) => {
 
   return (
     <div 
-      className='w-full md:w-4/12 h-100 card px-5 mb-8' 
+      className='w-full  h-100 card px-5 mb-8' 
       ref={imgRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

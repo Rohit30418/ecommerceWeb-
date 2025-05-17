@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
     const color = useSelector((state) => state.color.color);
     const uid = useSelector((state) => state?.user?.userid);
+     const lightColor = useSelector((state) => state?.LightColor?.LightColor);
     const cartCount = useSelector((state) => state?.user?.myCart);
     const darkColor=useSelector((state)=>state?.DarkColor?.DarkColor)
     const [searchText, setSearchText] = useState("");
@@ -17,7 +18,7 @@ const Header = () => {
     const [isMobile,setIsMobile]=useState(false);
     const headerRef = useRef(null);
     const navigation = useNavigate();
-
+   
   
 
     useEffect(()=>{
@@ -100,8 +101,8 @@ const Header = () => {
                     <Link className="text-white relative font-black" to={uid ? "/cart" : "/Login"}>Cart <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full  text-white">{cartCount.length}</small> <i className="fa fa-shopping-cart" aria-hidden="true"></i></Link>
                 </div>
             </div>
-            <header ref={headerRef} className="lg:relative shadow-xl bg-opacity-80 w-full z-50" >
-                <nav className="flex gap-x-5  justify-between items-center p-5 text-white">
+            <header ref={headerRef} className="lg:relative shadow-xl bg-white bg-opacity-100 w-full z-50" >
+                <nav className="flex gap-x-5  justify-between items-center p-5 text-black">
                     <div>
                         <img src="https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png" alt="" className="w-20" />
                     </div>
@@ -110,7 +111,7 @@ const Header = () => {
                         // onBlur={()=>{
                         //     setIsMenuOpened(false)
                         // }} 
-                        onChange={search} value={searchText} placeholder="Search Items Here" className="text-black outline-none p-2 rounded-full w-full " type="search" />
+                        onChange={search} value={searchText} placeholder="Search Items Here" style={{"backgroundColor":lightColor}} className={` text-black outline-none p-2 rounded-full w-full`} type="search" />
                         <i className="fa fa-search absolute right-[10px] top-[50%] translate-y-[-50%] text-black"></i>
 
 

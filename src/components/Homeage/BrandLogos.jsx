@@ -1,7 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { useSelector } from 'react-redux';
-import Heading from '../utils/Heading';
 
 const logos = [
   { name: "Amazon", src: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
@@ -9,17 +8,22 @@ const logos = [
   { name: "Nike", src: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" },
   { name: "Samsung", src: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" },
   { name: "PayPal", src: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" },
-  { name: "Sony", src: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Sony_logo.svg" },
+  { name: "Google", src: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
+  { name: "Microsoft", src: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" },
+  { name: "Adidas", src: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" },
 ];
 
 const settings = {
   dots: false,
+  arrows: false,
   infinite: true,
-  speed: 800,
   autoplay: true,
-  autoplaySpeed: 2000,
+  autoplaySpeed: 0, // continuous
+  speed: 4000, // slow and smooth
+  cssEase: 'linear', // linear easing
   slidesToShow: 5,
   slidesToScroll: 1,
+  pauseOnHover: false,
   responsive: [
     {
       breakpoint: 1024,
@@ -46,17 +50,22 @@ const BrandLogos = () => {
   const LightColor = useSelector((state) => state.LightColor.LightColor);
 
   return (
-    <div className="max-w-7xl mx-auto py-14 px-4" >
-      <Heading title={"Trusted By Top Brands"} />
+    <div className="max-w-7xl mx-auto px-4 py-6">
       <Slider {...settings}>
         {logos.map((brand, index) => (
-          <div key={index} className="p-4 flex justify-center items-center" style={{ backgroundColor: LightColor }}>
-            <img
-              src={brand.src}
-              alt={brand.name}
-              className="h-12 object-contain grayscale hover:grayscale-0 transition duration-300"
-              title={brand.name}
-            />
+          <div
+            key={index}
+            className="p-4 flex justify-center items-center"
+            style={{ backgroundColor: LightColor }}
+          >
+            <div className="h-24 flex items-center justify-center w-full">
+              <img
+                src={brand.src}
+                alt={brand.name}
+                className="h-16 max-w-[140px] object-contain grayscale hover:grayscale-0 transition duration-300"
+                title={brand.name}
+              />
+            </div>
           </div>
         ))}
       </Slider>

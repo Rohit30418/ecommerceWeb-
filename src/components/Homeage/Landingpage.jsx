@@ -68,7 +68,7 @@ const LandingPage = () => {
   }, [scene]);
 
   const colorOptions = [
-    '#282f39',
+    '#000000',
     '#2a3c29',
     '#613e3e',
     '#071f3f',

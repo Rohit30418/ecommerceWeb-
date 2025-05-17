@@ -56,7 +56,7 @@ const Cart = () => {
 
   return (
     <>
-      <Header />
+
       <div className="flex flex-col md:flex-row justify-between px-4 md:px-8 py-6 gap-6">
         {/* Left Column - Cart Items */}
         <div className="md:w-7/12">
@@ -82,8 +82,8 @@ const Cart = () => {
                       disabled={item.quantity >= 5}
                     >+</button>
                   </div>
-                  <p className="font-medium w-24 text-right">{Math.floor(item.price * 80 * item.quantity)} ₹</p>
-                  <button onClick={() => deleteCartItem(item.id)} className="text-red-600 hover:text-red-800">
+                  <p className="font-medium w-24 text-right mr-2">{Math.floor(item.price * 80 * item.quantity)} ₹ </p>
+                   <button onClick={() => deleteCartItem(item.id)} className="text-red-600  hover:text-red-800">
                     <i className="fa fa-trash"></i>
                   </button>
                 </div>

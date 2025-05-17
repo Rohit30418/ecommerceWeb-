@@ -24,8 +24,6 @@ const AboutProduct = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
-
       <div className="container mx-auto px-4 py-16">
 
        {
@@ -134,10 +132,6 @@ const AboutProduct = () => {
       </div>
     </div>
        }
-
-      
-        
-
         {/* Related Items */}
         <div className="mt-20">
        

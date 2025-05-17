@@ -9,9 +9,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const LandingMain = () => {
  
-  const color=useSelector((state)=>state.color.color);
+    const lightColor = useSelector((state) => state?.LightColor?.LightColor);
+    const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
   // const title1=useRef(null);
-  console.log(color);
   const hero=useRef(null)
 
   useEffect(() => {
@@ -76,21 +76,24 @@ export const LandingMain = () => {
 
   return (
     <>
-    <Header></Header>
-    <div  >
+    <div>
  
 
-<div style={{"backgroundColor":`${color}`}} className='relative px-2'>
+<div style={{"backgroundColor":`${lightColor}`}} className='relative px-2'>
 <div ref={hero}>
 {/* <div className="layer"></div>
 <div className="layer"></div>
 <div className="layer"></div> */}
       <div className='flex flex-wrap items-center pl-5'>
         <div className='w-12/12 md:w-6/12'>
-          <h1 className='text-white pb-5 text-6xl  lg:text-8xl font-extrabold'>Premium Sound Experience</h1>
-          <p className='text-slate-300'>
+          <h1 className={`pb-5 text-[${darkColor}] text-6xl  lg:text-8xl font-extrabold`}>Premium Sound Experience</h1>
+          <p className='text-[#656565]'>
             Discover the perfect blend of cutting-edge technology and unmatched comfort with our exclusive range of headphones. Whether you're an audiophile, a gamer, or simply enjoy high-quality sound, our selection offers something for everyone.
           </p>
+
+            <div className='mt-5'>
+          <button style={{backgroundColor:darkColor}} className='p-3 text-white'>Explore Now</button>
+         </div>
          
         </div>
         <div className='w-full md:w-6/12'>

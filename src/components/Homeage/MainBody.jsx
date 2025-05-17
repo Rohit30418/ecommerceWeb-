@@ -48,8 +48,9 @@ const MainBody = () => {
    <div className='relative bg-white'>
   {/* <span className='absolute   bg-white left-[-20px] right-[-20px] top-[-102px] rounded-[50%] h-[200px] bottom-0 h-8'></span> */}
 
+ <BrandLogos></BrandLogos>
 
-  <div   style={{"backgroundColor":LightColor}}><div className="container py-14 mx-auto relative z-[5]">
+  {/* <div   style={{"backgroundColor":LightColor}}><div className="container py-14 mx-auto relative z-[5]">
 
 <div >
   <Heading title={"We Provide best coustumer Experience"}></Heading>
@@ -140,7 +141,9 @@ Metus potenti velit sollicitudin porttitor magnis elit lacinia tempor varius, ut
           
 </div>
 </div>
-</div></div>
+</div></div> */}
+
+
 
 <div className="relative z-[5] pt-12">
 <Heading title={"Feature Products"}></Heading>
@@ -150,7 +153,7 @@ Metus potenti velit sollicitudin porttitor magnis elit lacinia tempor varius, ut
   <Timer></Timer>
 </div>
 
-<div className='flex container mx-auto flex-wrap'>   
+<div className='grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3  container'>   
 {
    response?.products?.map((item,ind)=>{
 return  <ProductCard  item={item} id={item.id}></ProductCard>
@@ -176,7 +179,7 @@ return  <ProductCard  item={item} id={item.id}></ProductCard>
 <div class="container">
   <div className='flex my-5'>
     <div className='w-5/12'>   
-    <Heading title={"Frequently Asked Questions"}></Heading>
+    <Heading textAlign={"text-left"} title={"Frequently Asked Questions"}></Heading>
     <p>Got questions? We’ve got answers.
     Find answers to the most common questions about our services, features, and support. If you don’t see your question here, feel free to reach out!</p>
     </div>   
@@ -185,12 +188,9 @@ return  <ProductCard  item={item} id={item.id}></ProductCard>
 </div>
 
  <Testimonial></Testimonial>
- <BrandLogos></BrandLogos>
+
  <TopBlogs></TopBlogs>
  
-
- <Footer></Footer>
-
 
    </div>
   )
