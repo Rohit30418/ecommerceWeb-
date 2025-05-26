@@ -3,14 +3,18 @@ import { Menu } from "./utils/MenuData"; // Assuming you have a file with menu d
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getAuth,signOut } from "firebase/auth";
 
 const Header = () => {
-    const color = useSelector((state) => state.color.color);
+    // const color = useSelector((state) => state.color.color);
     const uid = useSelector((state) => state?.user?.userid);
      const lightColor = useSelector((state) => state?.LightColor?.LightColor);
     const cartCount = useSelector((state) => state?.user?.myCart);
-    const darkColor=useSelector((state)=>state?.DarkColor?.DarkColor)
+    const darkColor=useSelector((state)=>state?.DarkColor?.DarkColor);
+  
+    
     const [searchText, setSearchText] = useState("");
+    const [isSticky,setSticky]=useState(false);
     const [isDropOpen, setDropOpen] = useState(null);
     const [activeNav, setActiveNav] = useState(null);
     const [isMenuOpened, setIsMenuOpened] = useState(false);
@@ -18,8 +22,22 @@ const Header = () => {
     const [isMobile,setIsMobile]=useState(false);
     const headerRef = useRef(null);
     const navigation = useNavigate();
-   
   
+
+    useEffect(()=>{
+        function handleScroll() {        
+        if (window.scrollY>100) {
+            setSticky(true);
+        }   else {
+        setSticky(false);
+      }
+        }
+       window.addEventListener("scroll",handleScroll);
+       return () => window.removeEventListener('scroll', handleScroll);
+    },[]);
+
+
+    
 
     useEffect(()=>{
           function checkWidth() {
@@ -85,23 +103,36 @@ const Header = () => {
         ), [searchText]
     );
     
-
-    console.log(isDropOpen);
-    
+  function handleLogout() {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      // Redirect or update UI after logout
+      console.log("Successfully signed out");
+    })
+    .catch((error) => {
+      console.error("Logout failed", error);
+    });
+  }
+  
+  console.log(uid);
+  
 
     return (
         <>
 
-        <div style={{"backgroundColor":darkColor}}>
-            <div className="px-5 py-2 bg-black flex items-center justify-between">
+        <div style={{"backgroundColor":darkColor}} className={`${isSticky?"fixed top-0 left-0 right-0 z-30":"static"}`}>
+            <div className="px-5 py-2 bg-black flex items-center justify-end md:justify-between">
 
-                <div class="text-white"><span> <i class="fas fa-phone-alt"></i> +48 146982059</span> <span><i class="fas fa-envelope"></i> rohitpant@gmail.com</span></div>
+                <div className="text-white hidden md:block"><span> <i class="fas fa-phone-alt"></i> +48 146982059</span> <span><i class="fas fa-envelope"></i> rohitpant@gmail.com</span></div>
                 <div className="flex gap-x-5 justify-end items-center ">
-                    <Link className="text-white font-black" to="/Login"><i className="fas fa-user"></i> Login</Link>
-                    <Link className="text-white relative font-black" to={uid ? "/cart" : "/Login"}>Cart <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full  text-white">{cartCount.length}</small> <i className="fa fa-shopping-cart" aria-hidden="true"></i></Link>
+                 <Link className="text-white font-black" to="/Login"><i className="fas fa-user"></i> Login</Link>
+                 <button onClick={handleLogout}>Logout</button>
+                    <Link className="text-white relative font-black" to={uid ? "/cart" : "/Login"}>Cart 
+                   {cartCount.length>0 && <><small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full  text-white">{cartCount.length}</small>  <i className={`fa fa-shopping-cart`} aria-hidden="true"></i></>} </Link>
                 </div>
             </div>
-            <header ref={headerRef} className="lg:relative shadow-xl bg-white bg-opacity-100 w-full z-50" >
+            <header ref={headerRef} className="lg:relative shadow-xl bg-white bg-opacity-100 w-full z-[1000]" >
                 <nav className="flex gap-x-5  justify-between items-center p-5 text-black">
                     <div>
                         <img src="https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png" alt="" className="w-20" />
@@ -111,7 +142,7 @@ const Header = () => {
                         // onBlur={()=>{
                         //     setIsMenuOpened(false)
                         // }} 
-                        onChange={search} value={searchText} placeholder="Search Items Here" style={{"backgroundColor":lightColor}} className={` text-black outline-none p-2 rounded-full w-full`} type="search" />
+                        onChange={search} value={searchText} placeholder="Search Items Here" style={{"backgroundColor":lightColor,"border":`1px solid ${darkColor}`}} className={` text-black outline-none p-2 rounded-full w-full`} type="search" />
                         <i className="fa fa-search absolute right-[10px] top-[50%] translate-y-[-50%] text-black"></i>
 
 
@@ -138,10 +169,10 @@ const Header = () => {
 }
                         
                     </div>
-                    <div className={`menus lg:static fixed bottom-0 transition-all duration-150 top-0 w-[50vw] ${isMenuOpened ? "right-0" : "right-[-100%]"} bg-black lg:bg-transparent z-50`}>
-                        <button className="lg:hidden" onClick={() => setIsMenuOpened(false)}>close</button>
+                    <div className={`menus lg:static fixed bottom-0 transition-all duration-150 top-0 w-[50vw] ${isMenuOpened ? "right-0" : "right-[-100%]"} bg-white lg:bg-transparent z-50`}>
+                        <button className="lg:hidden bg-red-600 text-white rounded-full m-1 w-6 h-6" onClick={() => setIsMenuOpened(false)}><i className="fa fa-times"></i></button>
                    
-                        <ul className="flex flex-col lg:flex-row justify-between lg:justify-end items-start gap-5 lg:items-center">
+                        <ul className="flex  pt-4 flex-col lg:flex-row justify-between lg:justify-end items-start gap-5 lg:items-center">
     {Menu.map((menuitem) => (
         <li 
             className="lg:relative dropmenu font-semibold"
@@ -156,7 +187,7 @@ const Header = () => {
                }}
           
         >
-            <button className="hover:bg-black rounded-full px-2 py-1">
+            <button className={`bg-white hover:bg-[${darkColor}] rounded-full px-2 py-1`}>
                 {menuitem.main} <i className="fa fa-angle-down"></i>
             </button>
 
@@ -177,7 +208,7 @@ const Header = () => {
 
                     </div>
                     <div className="block lg:hidden">
-                        <button onClick={() => setIsMenuOpened(true)}>menu</button>
+                        <button onClick={() => setIsMenuOpened(true)}><i className="fa fa-bars"></i></button>
                     </div>
                 </nav>
             </header>

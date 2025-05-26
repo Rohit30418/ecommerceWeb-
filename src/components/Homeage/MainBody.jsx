@@ -15,17 +15,17 @@ import TopBlogs from './TopBlogs'
 import PromoMarquee from './PromoMarquee'
 
 
-
-
 const MainBody = () => {
   const {loading,response,error,apidata}=  fetchApi();
   const color=useSelector((state)=>state.color.color);
   const LightColor=useSelector((state)=>state.LightColor.LightColor);
   const Tostes=useSelector((state)=>state.addToste);
-  console.log(Tostes);
     useEffect(() => {
         apidata("products/category/mobile-accessories/?limit=6");
     }, []);
+
+    console.log(Tostes);
+    
 
 
     if (loading) {
@@ -145,7 +145,7 @@ Metus potenti velit sollicitudin porttitor magnis elit lacinia tempor varius, ut
 
 
 
-<div className="relative z-[5] pt-12">
+<div className="relative z-[5] ">
 <Heading title={"Feature Products"}></Heading>
 
 
@@ -153,7 +153,7 @@ Metus potenti velit sollicitudin porttitor magnis elit lacinia tempor varius, ut
   <Timer></Timer>
 </div>
 
-<div className='grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3  container'>   
+<div className='grid  gap-4  sm:grid-cols-2 xl:grid-cols-3  container'>   
 {
    response?.products?.map((item,ind)=>{
 return  <ProductCard  item={item} id={item.id}></ProductCard>
@@ -168,6 +168,8 @@ return  <ProductCard  item={item} id={item.id}></ProductCard>
 
 
 
+
+
 </div>
 </div>
 
@@ -177,8 +179,8 @@ return  <ProductCard  item={item} id={item.id}></ProductCard>
 
 
 <div class="container">
-  <div className='flex my-5'>
-    <div className='w-5/12'>   
+  <div className='flex flex-wrap my-5 px-5 gap-2 md:gap-0'>
+    <div className='md:w-5/12'>   
     <Heading textAlign={"text-left"} title={"Frequently Asked Questions"}></Heading>
     <p>Got questions? We’ve got answers.
     Find answers to the most common questions about our services, features, and support. If you don’t see your question here, feel free to reach out!</p>

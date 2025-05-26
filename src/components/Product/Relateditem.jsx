@@ -18,7 +18,7 @@ const [page,setPage]=useState(1);
 
 
     return <>
-      <div className='flex flex-wrap'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
           {response?.products?.slice(page*3-3,page*3)?.map((item) => (
             <ProductCard key={item.id} item={item} />
           ))}

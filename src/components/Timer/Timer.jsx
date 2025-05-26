@@ -7,15 +7,14 @@ const Timer = () => {
   const calculateTimeLeft = () => {
     const futureDate = new Date(2025, 10, 12); // November 12, 2025
     const currentDate = new Date();
-
     const timeDiff = futureDate - currentDate;
 
-    let days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-    return { days, hours, minutes, seconds };
+    return {
+      days: Math.floor(timeDiff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((timeDiff / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((timeDiff / (1000 * 60)) % 60),
+      seconds: Math.floor((timeDiff / 1000) % 60),
+    };
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -24,30 +23,28 @@ const Timer = () => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
-
-    return () => clearInterval(timer); // Cleanup
+    return () => clearInterval(timer);
   }, []);
 
-  const boxStyle = {
-    backgroundColor: darkColor,
-  };
+  const padTime = (value) => (value < 10 ? `0${value}` : value);
 
-  const timeUnitClass = "w-14 h-14  flex items-center justify-center rounded-md text-white";
+  const timeBoxClass =
+    "flex flex-col items-center justify-center w-16 h-16 sm:w-16 sm:h-16 rounded-xl text-white shadow-md";
+  const labelClass = "text-xs sm:text-sm mt-1 font-medium text-white/80";
 
   return (
-    <div className="flex px-5 mb-4 justify-end text-center items-center gap-5">
-      <small className={timeUnitClass} style={boxStyle}>
-        {timeLeft.days} Days
-      </small>
-      <small className={timeUnitClass} style={boxStyle}>
-        {timeLeft.hours <= 9 && timeLeft.hours >= 0 ? '0' + timeLeft.hours : timeLeft.hours} Hours
-      </small>
-      <small className={timeUnitClass} style={boxStyle}>
-        {timeLeft.minutes <= 9 && timeLeft.minutes >= 0 ? '0' + timeLeft.minutes : timeLeft.minutes} Minutes
-      </small>
-      <small className={timeUnitClass} style={boxStyle}>
-        {timeLeft.seconds <= 9 && timeLeft.seconds >= 0 ? '0' + timeLeft.seconds : timeLeft.seconds} Seconds
-      </small>
+    <div className="flex flex-wrap gap-4 px-5 mb-6 justify-end sm:justify-end">
+      {[
+        { label: "Days", value: timeLeft.days },
+        { label: "Hours", value: padTime(timeLeft.hours) },
+        { label: "Minutes", value: padTime(timeLeft.minutes) },
+        { label: "Seconds", value: padTime(timeLeft.seconds) },
+      ].map((unit) => (
+        <div key={unit.label} className={timeBoxClass} style={{ backgroundColor: darkColor }}>
+          <div className="text-lg sm:text-xl font-semibold">{unit.value}</div>
+          <div className={labelClass}>{unit.label}</div>
+        </div>
+      ))}
     </div>
   );
 };

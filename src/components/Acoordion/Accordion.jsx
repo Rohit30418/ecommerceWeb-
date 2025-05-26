@@ -50,7 +50,7 @@ const Accordion = () => {
 
 
   return (
-   <div className="container px-5 w-7/12 mx-auto ">
+   <div className="container md:px-5 md:w-7/12 mx-auto ">
 
      <div>
         {faqs?.map((item,ind)=>{

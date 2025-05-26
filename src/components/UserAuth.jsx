@@ -10,7 +10,7 @@ const UserAuth = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                dispatch(addUserId(user.uid));
+                dispatch(addUserId(user));
             } else {
                 console.log("User is not logged in.");
             }

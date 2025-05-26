@@ -6,7 +6,7 @@ const Heading = ({ title,textAlign }) => {
 
   return (
     <h2
-      className={`${textAlign=="text-left"?"text-left":"text-center"} mb-16 font-bold text-4xl tinos-regular`}
+      className={`${textAlign=="text-left"?"text-left":"text-center"} mb-8 lg:mb-16 font-bold text-4xl tinos-regular`}
       style={{ color }}
     >
       {title}

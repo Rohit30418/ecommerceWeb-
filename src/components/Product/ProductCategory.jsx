@@ -147,6 +147,8 @@ const ProductCategory = () => {
     setIsmobileFilterActive(false);
   };
 
+ console.log(isMobileSortActive);
+
   return (
     <>
       {isOverlayActive && (
@@ -168,7 +170,14 @@ const ProductCategory = () => {
       <div className="flex md:flex-row flex-col pt-2 lg:pt-20">
         {/* Filter Panel */}
         <div className="md:w-3/12 shadow-lg rounded-lg px-4">
-          <div className={`${isMobileFilterActive ? "translate-x-0" : "translate-x-full"} fixed lg:static top-0 bottom-0 bg-white lg:translate-x-[0%] right-0 p-4 w-7/12 lg:w-12/12 z-40 transition ease-in-out duration-300`}>
+          <div className={`
+  fixed lg:static 
+  top-0 bottom-0 right-0 
+  bg-white p-4 w-7/12 md:w-full z-40 
+  transition ease-in-out duration-300 
+  ${isMobile ? (isMobileFilterActive ? 'translate-x-0' : 'translate-x-full') : 'translate-x-0'} 
+  lg:translate-x-0
+`}>
             <h4 className="font-bold text-lg" style={{ color: darkColor }}>Price</h4>
             <RangeSlider max={maxVal} min={minVal} handalerangeVal={handleRangeSlider} />
 
@@ -197,7 +206,7 @@ const ProductCategory = () => {
           </div>
 
            {/* Sort Panel */}
-        <div className={`fixed lg:static ${isMobileSortActive ? "translate-y-0" : "translate-y-full"} bottom-0 bg-white shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md transition ease-in-out duration-300 p-3`}>
+        <div className={`fixed lg:static ${isMobile?isMobileSortActive ? "translate-y-0" : "translate-y-full":"translate-y-0"} bottom-0 bg-white shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md transition ease-in-out duration-300 p-3`}>
           <button className="block mb-4" onClick={lowToHighPrice}>
             Price Low to High <i className="fa-solid fa-arrow-up"></i>
           </button>

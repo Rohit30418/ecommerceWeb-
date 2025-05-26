@@ -79,14 +79,14 @@ export const LandingMain = () => {
     <div>
  
 
-<div style={{"backgroundColor":`${lightColor}`}} className='relative px-2'>
+<div style={{"backgroundColor":`${lightColor}`}} className='relative py-5 px-2'>
 <div ref={hero}>
 {/* <div className="layer"></div>
 <div className="layer"></div>
 <div className="layer"></div> */}
-      <div className='flex flex-wrap items-center pl-5'>
+      <div className='flex flex-wrap  items-center pl-5'>
         <div className='w-12/12 md:w-6/12'>
-          <h1 className={`pb-5 text-[${darkColor}] text-6xl  lg:text-8xl font-extrabold`}>Premium Sound Experience</h1>
+          <h1 className={`pb-5 text-[${darkColor}] text-4xl md:text-6xl  lg:text-8xl font-extrabold`}>Premium Sound Experience</h1>
           <p className='text-[#656565]'>
             Discover the perfect blend of cutting-edge technology and unmatched comfort with our exclusive range of headphones. Whether you're an audiophile, a gamer, or simply enjoy high-quality sound, our selection offers something for everyone.
           </p>

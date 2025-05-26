@@ -57,10 +57,9 @@ const settings = {
 
 const TopBlogs = () => {
   const color = useSelector((state) => state.color.color);
-  const LightColor = useSelector((state) => state.LightColor.LightColor);
 
   return (
-    <div className=" mx-auto py-14  px-4" style={{ backgroundColor: LightColor }}>
+    <div className=" mx-auto py-14  px-4">
       <Heading title="Our Top Blogs" />
 
      <div className='container'>
@@ -74,7 +73,7 @@ const TopBlogs = () => {
                 <p className="text-gray-600 mb-4 text-sm">{blog.snippet}</p>
                 <a
                   href={blog.link}
-                  className="inline-block mt-auto text-white text-sm bg-black px-4 py-2 rounded-md hover:bg-opacity-80 transition"
+                  className="inline-block mt-auto text-white text-center text-sm bg-black px-4 py-2 rounded-md hover:bg-opacity-80 transition"
                   style={{ backgroundColor: color }}
                 >
                   Read More

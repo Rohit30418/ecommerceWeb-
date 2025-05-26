@@ -8,6 +8,7 @@ import { db } from '../../firebase';
 import { collection, addDoc, doc } from 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeToste, AddToste } from '../Redux/AddTosteSlice';
+import { ToastContainer,toast } from 'react-toastify';
 
 const ProductCard = ({ item }) => {
   const imgRef = useRef(null);

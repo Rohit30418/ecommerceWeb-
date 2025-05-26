@@ -1,229 +1,113 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer,toast } from 'react-toastify';
 import { db } from '../firebase';
-import { writeBatch,collection,setDoc, doc,onSnapshot, } from 'firebase/firestore';
-
+import { collection,addDoc,deleteDoc, doc, getDocs} from 'firebase/firestore';
 import { useSelector } from 'react-redux';
+
 const Payment = () => {
-    const [cardNumber, setCardNumber] = useState('');
-    const [expiryMonth, setExpiryMonth] = useState('');
-    const [expiryYear, setExpiryYear] = useState('');
-    const [cvv, setCvv] = useState('');
-    const [amount, setAmount] = useState('');
-    const [zipCode, setZipCode] = useState('');
-    const [errors, setErrors] = useState({});
-    const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+  const cartItems = useSelector((state) => state?.user?.myCart);
     const uid = useSelector((state) => state?.user?.userid);
-    const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate();
+  const [selectedMethod,setSelectedMethod]=useState("");
 
-    const API_URL = 'https://www.fakepay.io/purchase';
-    const API_KEY = 'cfc65ad1671a865ba28c4911126ce9'; // Replace with your actual API key
-    const navigate=useNavigate();
-    const validate = () => {
-        const errors = {};
 
-        if (!cardNumber || !/^[0-9]{16}$/.test(cardNumber)) {
-            errors.cardNumber = 'Card number must be 16 digits';
-        }
 
-        if (!expiryMonth || !/^(0[1-9]|1[0-2])$/.test(expiryMonth)) {
-            errors.expiryMonth = 'Invalid expiry month';
-        }
+const deleteCartItems = async () => {
+  try {
+    const cartRef = collection(db, 'users', uid, 'cart');
+    const cartSnapshot = await getDocs(cartRef);
 
-        if (!expiryYear || !/^[0-9]{4}$/.test(expiryYear)) {
-            errors.expiryYear = 'Invalid expiry year';
-        }
-
-        if (!cvv || !/^[0-9]{3,4}$/.test(cvv)) {
-            errors.cvv = 'CVC must be 3 or 4 digits';
-        }
-
-        if (!amount || amount <= 0) {
-            errors.amount = 'Amount must be a positive number';
-        }
-
-        if (!zipCode || !/^[0-9]{5}$/.test(zipCode)) {
-            errors.zipCode = 'Invalid zip code';
-        }
-
-        setErrors(errors);
-
-        return Object.keys(errors).length === 0;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setMessage('');
-        setErrors({});
-
-        if (validate()) {
-            setLoading(true);
-
-            const paymentDetails = {
-                card_number: cardNumber,
-                cvv: cvv,
-                expiration_month: expiryMonth,
-                expiration_year: expiryYear,
-                zip_code: zipCode,
-                amount: amount,
-            };
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Token token=${API_KEY}`,
-                    },
-                    body: JSON.stringify(paymentDetails),
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error_code || 'Payment failed');
-                }
-
-                const data = await response.json();
-                setMessage(`Payment successful! Token: ${data.token}`);
-            } catch (error) {
-                setMessage(`Payment failed: ${error.message}`);
-            } finally {
-                setLoading(false);
-            }
-        } else {
-            setMessage('Please correct the errors in the form.');
-        
-
-            const fetchCartItems = () => {
-                const userDocRef = doc(db, 'users', uid);
-                const cartCollectionRef = collection(userDocRef, 'cart');
-                
-                const unsubscribe = onSnapshot(cartCollectionRef, (snapshot) => {
-                  const cartItemsList = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                  }));
-
-                  setCartItems(cartItemsList); // Update state with fetched cart items
-
-                });
-          
-                return () => unsubscribe();
-              };
-
-              const placeOrder = async () => {
-                try {
-                    // const db = getFirestore();
-                    const userDocRef = doc(db, 'users', uid);
-                    const ordersCollectionRef = collection(userDocRef, 'orders');
-            
-                    // Create a new order with the cart items
-                    const orderDocRef = doc(ordersCollectionRef); // Firestore auto-generates a unique ID
-                    await setDoc(orderDocRef, {
-                        uid: uid,
-                        items: cartItems,
-                        createdAt: new Date(),
-                        status: 'Pending', // Example field
-                    });
-            
-                    console.log('Order placed successfully:', orderDocRef.id);
-            
-                    // Clear the user's cart after placing the order
-                    const batch = writeBatch(db);
-                    cartItems.forEach((item) => {
-                        const cartItemDocRef = doc(userDocRef, 'cart', item.id);
-                        console.log('Deleting cart item:', cartItemDocRef.path);
-                        batch.delete(cartItemDocRef);
-                    });
-            
-                    await batch.commit();
-                    console.log('Cart cleared successfully!');
-                    navigate("/Thanks");
-                } catch (error) {
-                    console.error('Error placing order:', error);
-                }
-            };
-            
-            
-
-              placeOrder();
-          
-              if (uid) {
-                fetchCartItems();
-              }
-        } 
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Card Number</label>
-                <input
-                    type="text"
-                    value={cardNumber}
-                    onChange={(e) => setCardNumber(e.target.value)}
-                />
-                {errors.cardNumber && <div style={{ color: 'red' }}>{errors.cardNumber}</div>}
-            </div>
-
-            <div>
-                <label>Expiry Month (MM)</label>
-                <input
-                    type="text"
-                    value={expiryMonth}
-                    onChange={(e) => setExpiryMonth(e.target.value)}
-                />
-                {errors.expiryMonth && <div style={{ color: 'red' }}>{errors.expiryMonth}</div>}
-            </div>
-
-            <div>
-                <label>Expiry Year (YYYY)</label>
-                <input
-                    type="text"
-                    value={expiryYear}
-                    onChange={(e) => setExpiryYear(e.target.value)}
-                />
-                {errors.expiryYear && <div style={{ color: 'red' }}>{errors.expiryYear}</div>}
-            </div>
-
-            <div>
-                <label>CVC</label>
-                <input
-                    type="text"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value)}
-                />
-                {errors.cvv && <div style={{ color: 'red' }}>{errors.cvv}</div>}
-            </div>
-
-            <div>
-                <label>Amount (in cents)</label>
-                <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                />
-                {errors.amount && <div style={{ color: 'red' }}>{errors.amount}</div>}
-            </div>
-
-            <div>
-                <label>Zip Code</label>
-                <input
-                    type="text"
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                />
-                {errors.zipCode && <div style={{ color: 'red' }}>{errors.zipCode}</div>}
-            </div>
-
-            <button type="submit" disabled={loading}>
-                {loading ? 'Processing...' : 'Pay'}
-            </button>
-
-            {message && <p>{message}</p>}
-        </form>
+    const deletePromises = cartSnapshot.docs.map((docItem) =>
+      deleteDoc(doc(db, 'users', uid, 'cart', docItem.id))
     );
+
+    await Promise.all(deletePromises);
+    console.log("Cart cleared successfully");
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+    toast.error("Failed to clear cart.");
+  }
+};
+
+
+const handlePayment = async () => {
+  if (!selectedMethod) {
+    toast.error("Please select a payment method.");
+    return;
+  }
+
+  try {
+    const orderCollectionRef = collection(db, 'users', uid, 'orders');
+
+    const uploadPromises = cartItems.map((item) => {
+      return addDoc(orderCollectionRef, {
+        ...item,
+        paymentMethod: selectedMethod,
+        orderDate: new Date(),
+      });
+    });
+
+    await Promise.all(uploadPromises);
+     await deleteCartItems();
+
+    toast.success("Payment successful! Orders placed.");
+    
+    // Optionally: clear cart from Redux or Firestore here
+
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  } catch (error) {
+    console.error("Error saving orders: ", error);
+    toast.error("Failed to place order.");
+  }
+};
+
+
+  function handleRadio(e) {
+    setSelectedMethod(e.target.getAttribute("payment-type"));
+    
+  }
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br px-4">
+      <ToastContainer theme="colored"></ToastContainer>
+      <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full animate-fade-in">
+        <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          Complete Your Payment
+        </h3>
+
+        <div className="space-y-4">
+          <div className="border p-4 rounded-lg flex items-center space-x-3 hover:shadow-md transition cursor-pointer">
+            <input onChange={handleRadio} checked={selectedMethod=="Cash on Delivery"} type="radio" name="payment" payment-type="Cash on Delivery" className="accent-black" />
+            <i className="fas fa-money-bill-wave text-xl text-green-600"></i>
+            <span className="text-lg font-medium text-gray-700">Cash on Delivery</span>
+          </div>
+
+          <div className="border p-4 rounded-lg flex items-center space-x-3 hover:shadow-md transition cursor-pointer">
+            <input onChange={handleRadio} checked={selectedMethod=="Credit/Debit Card"} type="radio" name="payment" payment-type="Credit/Debit Card" className="accent-black" />
+            <i className="fas fa-credit-card text-xl text-blue-500"></i>
+            <span className="text-lg font-medium text-gray-700">Credit/Debit Card</span>
+          </div>
+
+          <div className="border p-4 rounded-lg flex items-center space-x-3 hover:shadow-md transition cursor-pointer">
+            <input onChange={handleRadio} type="radio" name="payment"  payment-type="UPI / Wallet" className="accent-black" />
+            <i className="fas fa-mobile-alt text-xl text-purple-500"></i>
+            <span className="text-lg font-medium text-gray-700">UPI / Wallet</span>
+          </div>
+        </div>
+
+        <button
+          onClick={handlePayment}
+          className="w-full mt-6 bg-black text-white py-3 text-lg rounded-lg hover:bg-gray-800 transition shadow-md"
+        >
+          Pay now
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default Payment;

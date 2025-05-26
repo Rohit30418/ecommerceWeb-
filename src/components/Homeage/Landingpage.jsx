@@ -1,13 +1,13 @@
 import React, {
-  useState,
   useEffect,
   useRef,
   forwardRef,
   useLayoutEffect,
-  Suspense
+  Suspense,
 } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
+import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,6 @@ import { addColor } from '../Redux/ColorSlice';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Model component
 const Model = forwardRef(({ scene, color }, ref) => {
   useEffect(() => {
     if (scene) {
@@ -44,39 +43,91 @@ const Model = forwardRef(({ scene, color }, ref) => {
 const LandingPage = () => {
   const { scene } = useGLTF('gltf/sony_headphone_wh-1000xm4.glb');
   const modelRef = useRef(null);
+  const containerRef = useRef(null);
+  const controlsRef = useRef(null);
   const dispatch = useDispatch();
   const colorType = useSelector((state) => state.color.color);
-
-  useLayoutEffect(() => {
-    if (scene && modelRef.current) {
-      const rotationAnimation = gsap.to(modelRef.current.rotation, {
-        y: 4 * Math.PI,
-        duration: 10,
-        ease: 'linear',
-        scrollTrigger: {
-          trigger: '#modalCont',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 5,
-        },
-      });
-
-      return () => {
-        rotationAnimation.kill();
-      };
-    }
-  }, [scene]);
 
   const colorOptions = [
     '#000000',
     '#2a3c29',
     '#613e3e',
     '#071f3f',
-    '#ffdbae'
+    '#ffdbae',
   ];
 
+  useLayoutEffect(() => {
+    if (!scene || !modelRef.current || !containerRef.current) return;
+
+    const animation = gsap.to(modelRef.current.rotation, {
+      y: 4 * Math.PI,
+      duration: 10,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 5,
+        markers: false,
+      },
+    });
+
+    return () => {
+      animation.kill();
+    };
+  }, [scene]);
+
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    controls.enableZoom = false;
+    controls.maxPolarAngle = Math.PI / 2;
+    controls.minPolarAngle = Math.PI / 2;
+
+    const domElement = controls.domElement;
+
+    let startX = 0;
+    let startY = 0;
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 1) {
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+          // Horizontal movement: prevent scroll, allow rotation
+          e.preventDefault();
+        }
+        // else: vertical movement — allow page to scroll
+      }
+    };
+
+    domElement.addEventListener('touchstart', handleTouchStart, {
+      passive: true,
+    });
+    domElement.addEventListener('touchmove', handleTouchMove, {
+      passive: false,
+    });
+
+    return () => {
+      domElement.removeEventListener('touchstart', handleTouchStart);
+      domElement.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
+
   return (
-    <div id="modalCont" style={{ width: '100%', height: '90vh' }}>
+    <div
+      ref={containerRef}
+      style={{ width: '100%', height: '80vh', position: 'relative' }}
+    >
       <Canvas
         style={{ width: '100%', height: '100%' }}
         shadows
@@ -93,17 +144,12 @@ const LandingPage = () => {
         />
         <ambientLight intensity={0} />
         <Suspense fallback={null}>
-          <OrbitControls
-            enableZoom={false}
-            maxPolarAngle={Math.PI / 2}
-            minPolarAngle={Math.PI / 2}
-          />
+          <OrbitControls ref={controlsRef} />
           <Model ref={modelRef} scene={scene} color={colorType} />
         </Suspense>
       </Canvas>
 
-      {/* Color Selection Buttons */}
-      <div className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[80px] left-1/2 transform -translate-x-1/2">
+      <div className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[20px] left-1/2 transform -translate-x-1/2">
         {colorOptions.map((clr) => (
           <button
             key={clr}
