@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addUserId } from './Redux/UserSlice';
+import { addUserData } from './Redux/UserSlice';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -10,7 +10,9 @@ const UserAuth = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                dispatch(addUserId(user));
+                console.log(user);
+                
+                dispatch(addUserData(user));
             } else {
                 console.log("User is not logged in.");
             }

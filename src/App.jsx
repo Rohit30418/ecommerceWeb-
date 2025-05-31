@@ -13,6 +13,7 @@ import FatchCartItems from './components/FatchCartItems';
 import ChatBot from './components/ChatBot';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import FatchOrderItems from './components/FatchOrderItems';
 
 // Lazy-loaded components
 const AboutProduct = lazy(() => import('./components/AboutProduct'));
@@ -39,6 +40,7 @@ function App() {
       <UserAuth />
       <DarkColorCom />
       <FatchCartItems />
+      <FatchOrderItems/>    
       <div className='w-full'>
         <Suspense fallback={
           <div className='bg-white h-screen flex justify-center items-center'>

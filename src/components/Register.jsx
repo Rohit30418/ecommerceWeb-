@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import fatchApiCountryStateCity from './fatchApi/fatchApiCountryStateCity';
 import { auth,db } from '../firebase';
 import {doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword,updateProfile} from 'firebase/auth';
 
 
 const Register = ({toggleToste}) => {
@@ -55,7 +55,8 @@ console.log(getCountryInfo());
           setTimeout(async () => {
           //  console.log(JSON.stringify(values, null, 2));
           console.log(values);
-       const userCredential=await createUserWithEmailAndPassword(auth,values.email,values.password)
+       const userCredential=await createUserWithEmailAndPassword(auth,values.email,values.password);
+     
           const user =  userCredential?.user;
           console.log(user);
           setSubmitting(false);
