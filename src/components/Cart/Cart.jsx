@@ -5,13 +5,13 @@ import { db } from '../../firebase';
 import Header from '../Header';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { ToastContainer,toast } from 'react-toastify';
+import {toast } from 'react-toastify';
 
 const Cart = () => {
   const [isCheckOut, setIsCheckOut] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
-  const uid = useSelector((state) => state?.user?.userid);
-  const cartItems = useSelector((state) => state?.user?.myCart);
+  const uid = useSelector((state) => state?.user?.userData.uid);
+  const cartItems = useSelector((state) => state?.user?.myCart)|| [];
   const [pageNo, setPageNo] = useState(1);
   const navigate = useNavigate();
 
@@ -70,7 +70,6 @@ const Cart = () => {
     <>
 
       <div className="flex flex-col md:flex-row justify-between px-4 md:px-8 pt-6 gap-6">
-        <ToastContainer theme="colored"></ToastContainer>
         {/* Left Column - Cart Items */}
         <div className="md:w-7/12">
           {!isCheckOut ? (

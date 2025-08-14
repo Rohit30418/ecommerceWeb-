@@ -6,7 +6,7 @@ const Model = forwardRef(({ scene, color }, ref) => {
       if (scene) {
         scene.traverse((child) => {
           if (child.isMesh && child.material) {
-            child.material.color.set(color);
+            child.material.color.set("orange");
             child.castShadow = true;
             child.receiveShadow = true;
           }

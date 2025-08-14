@@ -13,28 +13,28 @@ const [page,setPage]=useState(1);
   }, [category]);
 
   const totalPages = response?.products
-  ? Math.ceil(response.products.length / 3)
+  ? Math.ceil(response.products.length / 6)
   : 0;
 
 
     return <>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-          {response?.products?.slice(page*3-3,page*3)?.map((item) => (
+      <div className='grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3'>
+          {response?.products?.slice(page*6-6,page*6)?.map((item) => (
             <ProductCard key={item.id} item={item} />
           ))}
         </div>
 
-        <div className="flex justify-center items-center gap-2">
+        {totalPages > 1 && <div className="flex mt-5 justify-center items-center gap-2">
           {
            [...Array(totalPages)].map((_,ind)=>(
         
-              <button className={`${page-1==ind?"bg-green-800":"bg-gray-800"} px-4 py-2 rounded-md text-white`} onClick={()=>{
+              <button key={ind} className={`${page-1==ind?"bg-brandOrange":"bg-gray-800"} px-4 py-2 rounded-md text-white`} onClick={()=>{
                 setPage(ind+1)
               }}>{ind+1}</button>
              
            ))
           }
-        </div>
+        </div>}
     </>
 }
 

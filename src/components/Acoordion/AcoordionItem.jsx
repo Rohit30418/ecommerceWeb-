@@ -5,19 +5,18 @@ const AcoordionItem = ({faq,handleClick,id,isActive}) => {
 
  const [isopen,setisopen]=useState(null); 
 
- const color=useSelector((state)=>state?.LightColor?.LightColor);
  
 function handleSubAccordian(ind) {
   setisopen(prev=>prev==ind?"null":ind)
 }
   return (
     <div className='mb-2'>
-          <button className='px-2 text-black py-3 text-md flex items-center justify-between gap-3 w-full  text-left rounded-lg  font-medium' onClick={()=>{
+          <button className='px-2 py-3 text-md flex items-center justify-between gap-3 w-full  text-left rounded-lg  font-medium transition-all duration-150 dark:bg-gray-400/20 bg-gray-200 hover:bg-brandOrange hover:text-white dark:text-white' onClick={()=>{
             handleClick(id)
-          }}   style={{"backgroundColor":`${color}`}} >{faq?.question}  <i className='fa fa-angle-down'></i></button>
+          }}   >{faq?.question}  <i className={`fa fa-angle-down`}></i></button>
         {
              isActive && <div className='shadow-lg py-3 px-1'>
-               <p>{faq.answer}</p>
+               <p className='dark:text-darkText'>{faq.answer}</p>
            </div>
         }
     </div>

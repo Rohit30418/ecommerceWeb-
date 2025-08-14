@@ -66,15 +66,15 @@ const TopBlogs = () => {
      <Slider {...settings}>
         {blogData.map((blog, index) => (
           <div key={index} className="p-4">
-            <div className="bg-white rounded-xl  overflow-hidden shadow-md h-full flex flex-col">
-              <img src={blog.image} alt={blog.title} className="h-48 w-full object-cover" />
-              <div className="p-4 h-full min-h-52 flex flex-col justify-between flex-grow">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{blog.title}</h3>
-                <p className="text-gray-600 mb-4 text-sm">{blog.snippet}</p>
+            <div className="bg-gray-400/20 rounded-xl p-4 dark:text-white overflow-hidden shadow-md h-full flex flex-col">
+              <img src={blog.image} alt={blog.title} className="h-48 rounded-md w-full object-cover" />
+              <div className="h-full mt-4 min-h-40 flex flex-col justify-between flex-grow">
+                <h3 className="text-lg font-semibold mb-2">{blog.title}</h3>
+                <p className="mb-4 text-sm">{blog.snippet}</p>
                 <a
                   href={blog.link}
-                  className="inline-block mt-auto text-white text-center text-sm bg-black px-4 py-2 rounded-md hover:bg-opacity-80 transition"
-                  style={{ backgroundColor: color }}
+                  className="inline-block mt-auto text-white text-center text-sm bg-brandOrange px-4 py-2 rounded-md hover:bg-opacity-80 transition"
+                  aria-label='Read more about the blog'
                 >
                   Read More
                 </a>

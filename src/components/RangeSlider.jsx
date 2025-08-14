@@ -25,16 +25,16 @@ const RangeSlider = ({handalerangeVal,min,max}) => {
   return (
     <div>
 
-     <div className='flex items-center gap-3 w-full'>
+     <div className='flex  items-center gap-3 w-full'>
       <div>
         <label>Min</label>
-        <input value={range[0]} readOnly  className='ring-1 w-full text-center ring-slate-500 rounded-sm p-1 outline-none' type="text" />
+        <input value={range[0]} readOnly  className='ring-1 text-black w-full text-center ring-slate-500 rounded-sm p-1 outline-none' type="text" />
       </div>
 
       -
       <div>
         <label>Max</label>
-        <input value={range[1]} readOnly className='ring-1 w-full text-center ring-slate-500 rounded-sm p-1 outline-none' type="text" />
+        <input value={range[1]} readOnly className='ring-1 text-black w-full text-center ring-slate-500 rounded-sm p-1 outline-none' type="text" />
         </div>
      </div>
 

@@ -15,15 +15,14 @@ const color = useSelector((state) => state.color.color);
                 dispatch(DarkColor('#ffae49'));
                 break;
         
-                case '#000000':
-                   
+                case '#000000':                 
              dispatch(DarkColor('#000000'));
              dispatch(addLightColor("#f2f0f1"))
                 break;
         
                 case '#071f3f':
                     dispatch(DarkColor('#031021'));
-                    dispatch(addLightColor('rgb(216, 223, 233)'))
+                    dispatch(addLightColor('#d8dfe9'))
                 break;
         
                 case '#2a3c29':

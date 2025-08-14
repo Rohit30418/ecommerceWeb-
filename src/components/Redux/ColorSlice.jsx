@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState={
-    color:"#f2f0f1"
+    color:"#000000"
 }
 
 

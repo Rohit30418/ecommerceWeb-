@@ -29,7 +29,7 @@ const Timer = () => {
   const padTime = (value) => (value < 10 ? `0${value}` : value);
 
   const timeBoxClass =
-    "flex flex-col items-center justify-center w-16 h-16 sm:w-16 sm:h-16 rounded-xl text-white shadow-md";
+    "flex flex-col items-center bg-brandOrange justify-center w-16 h-16 sm:w-16 sm:h-16 rounded-xl text-white shadow-md";
   const labelClass = "text-xs sm:text-sm mt-1 font-medium text-white/80";
 
   return (
@@ -40,7 +40,7 @@ const Timer = () => {
         { label: "Minutes", value: padTime(timeLeft.minutes) },
         { label: "Seconds", value: padTime(timeLeft.seconds) },
       ].map((unit) => (
-        <div key={unit.label} className={timeBoxClass} style={{ backgroundColor: darkColor }}>
+        <div key={unit.label} className={timeBoxClass}>
           <div className="text-lg sm:text-xl font-semibold">{unit.value}</div>
           <div className={labelClass}>{unit.label}</div>
         </div>

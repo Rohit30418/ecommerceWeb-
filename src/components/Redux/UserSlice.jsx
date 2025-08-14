@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
-userData:"",
+userData:null,
 myCart:[],
 myOrder:[],
+isLoggedIn: false,
+isauthChecked: false
 };
 
 const UserSlice=createSlice({
@@ -12,6 +14,14 @@ const UserSlice=createSlice({
     reducers:{
         addUserData:(state,action)=>{
             state.userData=action.payload;
+            state.isLoggedIn = true;
+            state.isauthChecked = true;
+        },
+
+        logoutUser:(state)=>{
+            state.userData = null;
+            state.isLoggedIn = false;
+            state.isauthChecked = false;
         },
 
         myCart:(state,action)=>{
@@ -26,5 +36,5 @@ const UserSlice=createSlice({
     }
 })
 
-export const{addUserData,myCart,myOrder}=UserSlice.actions;
+export const{addUserData,myCart,myOrder,logoutUser}=UserSlice.actions;
 export default UserSlice.reducer;

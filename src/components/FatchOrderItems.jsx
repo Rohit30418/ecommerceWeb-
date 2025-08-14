@@ -6,7 +6,7 @@ import { collection, onSnapshot, doc } from 'firebase/firestore';
 
 const FatchOrderItems = () => {
 const dispatch = useDispatch();
-const uid = useSelector((state) => state?.user?.userData.uid);
+const uid = useSelector((state) => state?.user?.userData?.uid);
    useEffect(() => {
           if (!uid) return;
   

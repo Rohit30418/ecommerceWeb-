@@ -55,10 +55,10 @@ const BrandLogos = () => {
         {logos.map((brand, index) => (
           <div
             key={index}
-            className="p-4 flex justify-center items-center"
-            style={{ backgroundColor: LightColor }}
+            className="p-4 mt-8 flex justify-center  items-center"
+            
           >
-            <div className="h-24 flex items-center justify-center w-full">
+            <div className="h-28 flex items-center bg-gray-200 dark:bg-gray-400/20 rounded-md py-8 justify-center w-full">
               <img
                 src={brand.src}
                 alt={brand.name}

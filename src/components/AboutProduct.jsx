@@ -23,7 +23,7 @@ const AboutProduct = () => {
   }, [response]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-darkBg min-h-screen">
       <div className="container mx-auto px-4 py-16">
 
        {
@@ -61,7 +61,7 @@ const AboutProduct = () => {
           </div>
         </div>
       </div>
-      :<div className="flex flex-col md:flex-row gap-10 bg-white p-8 rounded-3xl shadow-xl">
+      :<div className="flex flex-col md:flex-row gap-10 bg-gray-400/20 p-8 rounded-3xl ">
           
       {/* Product Image */}
       <div className="md:w-5/12">
@@ -76,7 +76,7 @@ const AboutProduct = () => {
       {/* Product Details */}
       <div className="md:w-7/12 space-y-4">
        <Heading title={response?.title}></Heading>
-        <p className="text-gray-600 text-base">{response?.description}</p>
+        <p className="text-gray-600 dark:text-white text-base">{response?.description}</p>
 
         <p className="text-2xl font-bold text-green-600 bg-green-50 inline-block px-4 py-1 rounded-lg shadow-sm">
           ₹{Math.floor(response?.price * 85)}
@@ -92,17 +92,17 @@ const AboutProduct = () => {
           <table className="w-full text-sm border-t border-gray-200">
             <tbody>
               {[
-[<i className="fas fa-tags mr-2 text-gray-500"></i>, 'Brand', response?.brand],
-[<i className="fas fa-boxes mr-2 text-gray-500"></i>, 'Category', response?.category],
-[<i className="fas fa-layer-group mr-2 text-gray-500"></i>, 'Minimum Order Quantity', response?.minimumOrderQuantity],
-[<i className="fas fa-shield-alt mr-2 text-gray-500"></i>, 'Warranty', response?.warrantyInformation],
+[<i className="fas fa-tags mr-2 text-gray-500 dark:text-white"></i>, 'Brand', response?.brand],
+[<i className="fas fa-boxes mr-2 text-gray-500 dark:text-white"></i>, 'Category', response?.category],
+[<i className="fas fa-layer-group mr-2 text-gray-500 dark:text-white"></i>, 'Minimum Order Quantity', response?.minimumOrderQuantity],
+[<i className="fas fa-shield-alt mr-2 text-gray-500 dark:text-white"></i>, 'Warranty', response?.warrantyInformation],
 ].map(([icon, label, value], idx) => (
 <tr key={idx} className="border-b">
-<td className="py-2 pr-4 font-medium text-gray-700">
+<td className="py-2 pr-4 font-medium text-gray-700 dark:text-white">
   {icon}
   {label}
 </td>
-<td className="py-2 text-gray-600">{value || '—'}</td>
+<td className="py-2 text-gray-600 dark:text-white">{value || '—'}</td>
 </tr>
 ))
 }

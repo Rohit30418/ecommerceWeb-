@@ -1,13 +1,6 @@
-import React, {
-  useEffect,
-  useRef,
-  forwardRef,
-  useLayoutEffect,
-  Suspense,
-} from 'react';
+import { useEffect, useRef, forwardRef, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +13,7 @@ const Model = forwardRef(({ scene, color }, ref) => {
     if (scene) {
       scene.traverse((child) => {
         if (child.isMesh && child.material) {
-          child.material.color.set(color);
+          child.material.color.set("orange");
           child.castShadow = true;
           child.receiveShadow = true;
         }
@@ -34,7 +27,7 @@ const Model = forwardRef(({ scene, color }, ref) => {
       scale={1.8}
       dispose={null}
       position={[-1, -1.4, -0.5]}
-      rotation={[-0.03, -0.5, -0.02]}
+      // Don't set rotation here, let GSAP control it
       object={scene}
     />
   );
@@ -56,24 +49,44 @@ const LandingPage = () => {
     '#ffdbae',
   ];
 
-  useLayoutEffect(() => {
-    if (!scene || !modelRef.current || !containerRef.current) return;
+  // Wait for refs and scene to be ready, then setup GSAP
+  useEffect(() => {
+    let animation;
+    let checkReadyId;
 
-    const animation = gsap.to(modelRef.current.rotation, {
-      y: 4 * Math.PI,
-      duration: 10,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 5,
-        markers: false,
-      },
-    });
+    function setupAnimation() {
+      if (modelRef.current && containerRef.current) {
+        // Reset rotation to initial value
+        modelRef.current.rotation.set(-0.03, -0.5, -0.02);
+
+        animation = gsap.to(modelRef.current.rotation, {
+          y: 4 * Math.PI,
+          duration: 10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 5,
+            markers: false,
+          },
+        });
+      } else {
+        // Poll until refs are ready
+        checkReadyId = requestAnimationFrame(setupAnimation);
+      }
+    }
+
+    if (scene) {
+      setupAnimation();
+    }
 
     return () => {
-      animation.kill();
+      if (animation) {
+        animation.kill();
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      }
+      if (checkReadyId) cancelAnimationFrame(checkReadyId);
     };
   }, [scene]);
 
@@ -127,6 +140,8 @@ const LandingPage = () => {
     <div
       ref={containerRef}
       style={{ width: '100%', height: '80vh', position: 'relative' }}
+      aria-label="3D headphone model viewer"
+      role="region"
     >
       <Canvas
         style={{ width: '100%', height: '100%' }}
@@ -140,22 +155,29 @@ const LandingPage = () => {
         />
         <directionalLight
           position={[-5, -35, -35]}
-          intensity={colorType === '#000000' ? 14 : 15}
+          intensity={colorType === '#000000' ? 10 : 15}
         />
-        <ambientLight intensity={0} />
+        <ambientLight intensity={5} />
         <Suspense fallback={null}>
           <OrbitControls ref={controlsRef} />
           <Model ref={modelRef} scene={scene} color={colorType} />
         </Suspense>
       </Canvas>
 
-      <div className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[20px] left-1/2 transform -translate-x-1/2">
+      <div
+        className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[20px] left-1/2 transform -translate-x-1/2"
+        role="group"
+        aria-label="Color selection"
+      >
         {colorOptions.map((clr) => (
           <button
             key={clr}
             onClick={() => dispatch(addColor(clr))}
             className="w-5 h-5 rounded-full"
             style={{ backgroundColor: clr }}
+            aria-label={`Select color ${clr}`}
+            aria-pressed={colorType === clr}
+            tabIndex={0}
           ></button>
         ))}
       </div>

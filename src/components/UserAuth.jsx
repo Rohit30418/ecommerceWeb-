@@ -10,12 +10,9 @@ const UserAuth = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log(user);
-                
                 dispatch(addUserData(user));
-            } else {
-                console.log("User is not logged in.");
-            }
+           
+            } 
         });
 
         // Clean up subscription on component unmount
