@@ -58,15 +58,14 @@ const LandingPage = () => {
       if (modelRef.current && containerRef.current) {
         // Reset rotation to initial value
         modelRef.current.rotation.set(-0.03, -0.5, -0.02);
-
         animation = gsap.to(modelRef.current.rotation, {
           y: 4 * Math.PI,
           duration: 10,
           ease: 'none',
           scrollTrigger: {
             trigger: containerRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
+            start: 'top 100%',
+  
             scrub: 5,
             markers: false,
           },
@@ -139,9 +138,10 @@ const LandingPage = () => {
   return (
     <div
       ref={containerRef}
-      style={{ width: '100%', height: '80vh', position: 'relative' }}
+      style={{ width: '100%', position: 'relative' }}
       aria-label="3D headphone model viewer"
       role="region"
+      className='h-[30vh] md:h-[80vh]'
     >
       <Canvas
         style={{ width: '100%', height: '100%' }}
@@ -165,7 +165,7 @@ const LandingPage = () => {
       </Canvas>
 
       <div
-        className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[20px] left-1/2 transform -translate-x-1/2"
+        className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[-10px] left-1/2 transform -translate-x-1/2"
         role="group"
         aria-label="Color selection"
       >

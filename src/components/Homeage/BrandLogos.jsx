@@ -58,11 +58,11 @@ const BrandLogos = () => {
             className="p-4 mt-8 flex justify-center  items-center"
             
           >
-            <div className="h-28 flex items-center bg-gray-200 dark:bg-gray-400/20 rounded-md py-8 justify-center w-full">
+            <div className="h-28 flex p-3 items-center bg-gray-200 dark:bg-gray-400/20 rounded-md py-8 justify-center w-full">
               <img
                 src={brand.src}
                 alt={brand.name}
-                className="h-16 max-w-[140px] object-contain grayscale hover:grayscale-0 transition duration-300"
+                className="h-full w-full object-contain "
                 title={brand.name}
               />
             </div>

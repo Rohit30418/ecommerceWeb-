@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState,useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const Timer = () => {
-  const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
-
+  const timeRef=useRef(null);
   const calculateTimeLeft = () => {
     const futureDate = new Date(2025, 10, 12); // November 12, 2025
     const currentDate = new Date();
@@ -26,6 +27,27 @@ const Timer = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(()=>{
+    if (!timeRef.current) return;
+    gsap.from(
+    timeRef.current.querySelectorAll("div")
+,{      duration: 0.8,
+    ease: "back.out(1.7)",
+    y:10,
+    stagger: 0.1,
+       opacity:0,
+       scrollTrigger:{
+        trigger: timeRef.current,
+       
+        start: "top 100%",
+        toggleActions: "play none none reverse",
+         opacity:1,
+       }
+      }
+      
+    )
+  },[])
+
   const padTime = (value) => (value < 10 ? `0${value}` : value);
 
   const timeBoxClass =
@@ -33,14 +55,14 @@ const Timer = () => {
   const labelClass = "text-xs sm:text-sm mt-1 font-medium text-white/80";
 
   return (
-    <div className="flex flex-wrap gap-4 px-5 mb-6 justify-end sm:justify-end">
+    <div ref={timeRef} className="flex flex-wrap gap-4 px-5 mb-6 justify-end sm:justify-end">
       {[
         { label: "Days", value: timeLeft.days },
         { label: "Hours", value: padTime(timeLeft.hours) },
         { label: "Minutes", value: padTime(timeLeft.minutes) },
         { label: "Seconds", value: padTime(timeLeft.seconds) },
       ].map((unit) => (
-        <div key={unit.label} className={timeBoxClass}>
+        <div  key={unit.label} className={timeBoxClass}>
           <div className="text-lg sm:text-xl font-semibold">{unit.value}</div>
           <div className={labelClass}>{unit.label}</div>
         </div>

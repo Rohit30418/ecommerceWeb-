@@ -144,12 +144,7 @@ const Header = () => {
   return (
     <>
    
-      {/* Sample popup */}
-      {/* <div className="w-64 shadow-lg fixed top-[50%] h-[250px] bg-white -translate-y-[50%] z-30 left-[50%] -translate-x-[50%] rounded-md">
-        popup
-      </div> */}
 
-      {/* Header */}
       <div
        
         className={`${isSticky ? "fixed top-0 left-0 right-0 z-30" : "static"}`}
@@ -164,6 +159,10 @@ const Header = () => {
               <i className="fas fa-envelope"></i> rohitpant@gmail.com
             </span>
           </div>
+
+          <button className="bg-red-500" onClick={()=>{
+            toggleDark();
+          }}>toggle</button>
 
           <div className="flex gap-x-5 justify-end items-center">
             {!isLoggedin ? (
@@ -187,6 +186,7 @@ const Header = () => {
   <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
   <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
   <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+   
 </div> <p>Hi {userDetails?.firstName}</p>
                 <i className="fa fa-user text-white"></i></div>
                 {isProfileDropActive && (
@@ -207,7 +207,7 @@ const Header = () => {
               Cart
               {  Array.isArray(cartCount) && cartCount.length >= 0 && (
                 <>
-                 {isLoggedin && <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
+                 {isLoggedin && <small className="flex  absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
                     {cartCount.length}
                   </small>}
                   <i className="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -223,10 +223,8 @@ const Header = () => {
         location.pathname !== "/" && "dark:border-b-gray-400 border-b"
       } bg-brandOrange lg:bg-white rounded-b-3xl dark:bg-darkBg lg:rounded-none w-full z-[1000]`}
     >
-          <button className="bg-red-500" onClick={()=>{
-            toggleDark();
-          }}>toggle</button>
-          <nav className="flex gap-x-5 justify-between items-center px-5 py-3 text-black">
+         
+          <nav className="flex gap-x-5 justify-between items-center px-5 py-5 text-black">
             {/* Logo */}
             <div>
               <img
@@ -299,7 +297,7 @@ const Header = () => {
               <ul className="flex pt-4 lg:pt-0 flex-col lg:flex-row justify-between lg:justify-end items-start gap-5 lg:items-center">
                 {Menu.map((menuitem) => (
                   <li
-                    className="lg:relative w-full dropmenu font-semibold"
+                    className="lg:relative text-lg w-full dropmenu font-semibold"
                     key={menuitem.main}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -309,7 +307,7 @@ const Header = () => {
                     }}
                   >
                     <button
-  className={`dark:text-lightBg flex items-center justify-between lg:justify-center lg:text-center text-left rounded-sm  py-1 w-full`}
+  className={`dark:text-lightBg transition-all duration-300 hover:bg-brandOrange py-2 flex items-center gap-1 justify-between lg:justify-center lg:text-center text-left rounded-sm  px-1 w-full`}
 >
   {menuitem.main}
   <i className={`${isDropOpen==menuitem.main ? "fa fa-angle-up" : "fa fa-angle-down"}`}></i>
@@ -329,7 +327,7 @@ const Header = () => {
                               setIsMenuOpened(false);
                               setDropOpen(null);
                             }} 
-                              className="capitalize block mb-4 whitespace-nowrap"
+                              className="capitalize block mb-2 hover:text-brandOrange transition-all duration-300 whitespace-nowrap"
                               to={`/productCategory/${submenu}`}
                             >
                               {submenu}

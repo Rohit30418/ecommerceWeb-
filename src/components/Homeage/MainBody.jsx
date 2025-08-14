@@ -9,7 +9,13 @@ import Timer from '../Timer/Timer'
 import Heading from '../utils/Heading';
 import BrandLogos from './BrandLogos'
 import TopBlogs from './TopBlogs'
-import PromoMarquee from './PromoMarquee'
+import PromoMarquee from './PromoMarquee';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from 'react';
+
+
+gsap.registerPlugin(ScrollTrigger);
 
 
 const MainBody = () => {
@@ -17,6 +23,30 @@ const MainBody = () => {
   useEffect(() => {
     apidata("products/category/mobile-accessories/?limit=8");
   }, []);
+
+  const cardsContainerRef = useRef(null);
+
+useEffect(() => {
+  if (!cardsContainerRef.current || !response?.products?.length) return;
+
+  const cards = cardsContainerRef.current.children;
+
+  gsap.from(cards, {
+    y: 50,
+    opacity: 0,
+    scale: 0.9,
+    duration: 0.8,
+    ease: "back.out(1.7)",
+    stagger: 0.2,
+    scrollTrigger: {
+      trigger: cardsContainerRef.current,
+      start: "top 80%",
+      toggleActions: "play none none reverse",
+    },
+  });
+}, [response?.products]);
+
+
 
   if (loading) {
     return <div className='flex gap-4 flex-wrap'>
@@ -43,7 +73,7 @@ const MainBody = () => {
           <Timer></Timer>
         </div>
 
-        <div className='grid  gap-5 sm:grid-cols-2 xl:grid-cols-4  container'>
+        <div ref={cardsContainerRef} className='grid  gap-5 sm:grid-cols-2 xl:grid-cols-4  container'>
           {
             response?.products?.map((item, ind) => {
               return <ProductCard item={item} id={item.id} key={item.id}></ProductCard>

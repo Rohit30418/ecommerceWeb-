@@ -28,7 +28,7 @@ const Cart = lazy(() => import('./components/Cart/Cart'));
 // Layout inside App
 const AppLayout = () => {
   return (
-    <div className='bg-lightBg dark:bg-darkBg'>
+    <div className='bg-white dark:bg-darkBg'>
       <Header />
       <main >
         <Outlet />
