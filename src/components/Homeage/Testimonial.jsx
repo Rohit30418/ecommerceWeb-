@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Heading from '../utils/Heading';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
   {
@@ -31,16 +35,13 @@ const testimonials = [
     image: "https://randomuser.me/api/portraits/men/52.jpg",
     rating: 4
   },
-
   {
     quote: "Great deals! Saved a lot on home appliances. Super happy!",
     name: "Alex P.",
     role: "Bargain Hunter",
     image: "https://randomuser.me/api/portraits/men/52.jpg",
     rating: 4
-  },
-
-  {
+  },{
     quote: "Great deals! Saved a lot on home appliances. Super happy!",
     name: "Alex P.",
     role: "Bargain Hunter",
@@ -49,7 +50,7 @@ const testimonials = [
   }
 ];
 
-// Render Font Awesome stars based on rating
+// Render Font Awesome stars
 const renderStars = (rating) => {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -66,15 +67,72 @@ const renderStars = (rating) => {
 
 const Testimonial = () => {
   const color = useSelector((state) => state.color.color);
-  const LightColor = useSelector((state) => state.LightColor.LightColor);
+  const containerRef = useRef(null);
+  const bgRef = useRef(null);
+  const cardsRef = useRef([]);
+
+ useEffect(() => {
+  cardsRef.current.forEach((card) => {
+    gsap.from(card, {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
+      },
+    });
+  });
+}, []);
+
+
+  const handleMouseEnter = (e) => {
+    const cardRect = e.currentTarget.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
+
+    gsap.to(bgRef.current, {
+      top: cardRect.top - containerRect.top,
+      left: cardRect.left - containerRect.left,
+      width: cardRect.width,
+      height: cardRect.height,
+      duration: 0.5,
+      ease: "power3.out"
+    });
+  };
+
+  const handleMouseLeave = () => {
+    gsap.to(bgRef.current, {
+      width: 0,
+      height: 0,
+      duration: 0.3,
+      ease: "power3.out"
+    });
+  };
 
   return (
-    <div className="w-full  dark:bg-darkBg dark:text-white text-black">
-      <div className="max-w-7xl mx-auto py-14 px-4">
+    <div className="w-full bg-white dark:bg-darkBg dark:text-white text-black">
+      <div className="max-w-7xl mx-auto py-14 px-4 relative" ref={containerRef}>
         <Heading title={"What Our Customers Say"} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {/* Shared hover background */}
+        <div
+          ref={bgRef}
+          className="absolute bg-brandOrange/30 rounded-2xl z-0 pointer-events-none"
+          style={{ width: 0, height: 0, top: 0, left: 0 }}
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-gray-400/20  p-6 rounded-2xl shadow-md h-full transition-all hover:shadow-xl flex flex-col justify-between border" style={{ borderColor: color }}>
+            <div
+              key={index}
+              ref={(el) => (cardsRef.current[index] = el)}
+              className="dark:bg-gray-400/20  p-6 rounded-2xl h-full transition-all  flex flex-col justify-between border"
+              style={{ borderColor: color }}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <div className="flex flex-col items-center text-center gap-4">
                 <img
                   src={testimonial.image}
@@ -85,7 +143,7 @@ const Testimonial = () => {
                 <p className="italic text-sm">"{testimonial.quote}"</p>
                 <div className="flex gap-1">{renderStars(testimonial.rating)}</div>
                 <div>
-                  <p className="font-semibold text-lg text-gray-800">{testimonial.name}</p>
+                  <p className="font-semibold text-lg text-gray-800 dark:text-white">{testimonial.name}</p>
                   <p className="text-sm">{testimonial.role}</p>
                 </div>
               </div>

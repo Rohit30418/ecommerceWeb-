@@ -1,12 +1,35 @@
 import React, { useState } from 'react'
 import AcoordionItem from './AcoordionItem';
-import Heading from '../utils/Heading';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);;
+
 
 
 const Accordion = () => {
 
     const [isOpen,setIsOpen]=useState(null);
 
+    const accordianRef = useRef(null);
+
+    useEffect(()=>{
+  if(!accordianRef.current) return;
+  gsap.from(accordianRef.current.querySelectorAll("div"),{
+    x:100,
+    opacity:0,
+    duration:0.5,
+    ease:"power1.out",
+    stagger:0.2,
+    delay:1,
+    scrollTrigger:{
+      trigger:accordianRef.current,
+      start:"top 80%",
+      toggleActions:"play none none reverse"
+    }
+  })
+},[])
     const faqs = [
       {
         question: "What payment methods do you accept?",
@@ -52,7 +75,7 @@ const Accordion = () => {
   return (
    <div className="container md:px-5 md:w-7/12 mx-auto ">
 
-     <div>
+     <div ref={accordianRef}>
         {faqs?.map((item,ind)=>{
            
             return <AcoordionItem handleClick={handleClick} isActive={isOpen==ind?true:false}  id={ind} faq={item} key={ind} ></AcoordionItem>

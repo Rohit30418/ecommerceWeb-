@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchApi } from '../fatchApi/fetchApi';
 import ProductCard from './ProductCard';
 import RangeSlider from '../RangeSlider';
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Cardloader from './Cardloader';
 
 const ProductCategory = () => {
-  const [category, setCategory] = useState([]);
+  // Removed unused 'category' state
   const [pageNo, setPageNo] = useState(1);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -21,9 +21,9 @@ const ProductCategory = () => {
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(0);
   const { loading, response, apidata } = fetchApi();
-  const color = useSelector((state) => state.color.color);
+  // Removed unused 'color' selector
   const { Category } = useParams();
-  const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
+  // Removed unused 'darkColor' selector
 
   useEffect(() => {
     apidata(`products/category/${Category}`);
@@ -46,7 +46,7 @@ const ProductCategory = () => {
       setFilteredData(products);
 
       const categories = [...new Set(products.map(item => item.category))];
-      setCategory(categories);
+   
 
       const prices = products.map(p => p.price * (1 - p.discountPercentage / 100) * 85);
       const maxPrice = Math.floor(Math.max(...prices));
@@ -58,15 +58,16 @@ const ProductCategory = () => {
     }
   }, [response]);
 
-  const handleRangeChange = (value) => {
-    if (!data) return;
-    const filtered = data.filter(item =>
-      item.price * (1 - item.discountPercentage / 100) * 85 >= value[0] &&
-      item.price * (1 - item.discountPercentage / 100) * 85 <= value[1]
-    );
-    setFilteredData(filtered);
-  };
-
+const handleRangeChange = (value) => {
+  if (!data) return;
+  const min = Math.floor(value[0]);
+  const max = Math.ceil(value[1]);
+  const filtered = data.filter(item => {
+    const price = Math.floor(item.price * (1 - item.discountPercentage / 100) * 85);
+    return price >= min && price <= max;
+  });
+  setFilteredData(filtered);
+};
   const lowToHighPrice = () => {
     const sorted = [...filteredData].sort((a, b) =>
       a.price * (1 - a.discountPercentage / 100) - b.price * (1 - b.discountPercentage / 100)
@@ -96,10 +97,7 @@ const ProductCategory = () => {
     isMobile ? setTempRange(val) : handleRangeChange(val);
   };
 
-  const handleCategory = (categoryName) => {
-    const filtered = data.filter(item => item.category === categoryName);
-    setFilteredData(filtered);
-  };
+  // Removed unused 'handleCategory' function
 
   useEffect(() => {
     let result = data;

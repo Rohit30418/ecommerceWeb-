@@ -55,7 +55,7 @@ const Timer = () => {
   const labelClass = "text-xs sm:text-sm mt-1 font-medium text-white/80";
 
   return (
-    <div ref={timeRef} className="flex flex-wrap gap-4 px-5 mb-6 justify-end sm:justify-end">
+    <div ref={timeRef} className="flex flex-wrap gap-4  mb-6 justify-end sm:justify-end">
       {[
         { label: "Days", value: timeLeft.days },
         { label: "Hours", value: padTime(timeLeft.hours) },

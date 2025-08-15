@@ -1,7 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
-import { useSelector } from 'react-redux';
 import Heading from '../utils/Heading';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 const blogData = [
   {
@@ -37,53 +39,73 @@ const blogData = [
 ];
 
 const settings = {
-  dots: true,
   infinite: true,
   speed: 700,
   slidesToShow: 3,
   slidesToScroll: 1,
-  autoplay: false,
+  autoplay: true,
   responsive: [
-    {
-      breakpoint: 1024,
-      settings: { slidesToShow: 2 }
-    },
-    {
-      breakpoint: 768,
-      settings: { slidesToShow: 1 }
-    }
+    { breakpoint: 1024, settings: { slidesToShow: 2 } },
+    { breakpoint: 768, settings: { slidesToShow: 1 } }
   ]
 };
 
 const TopBlogs = () => {
-  const color = useSelector((state) => state.color.color);
-
   return (
-    <div className=" mx-auto py-14  px-4">
+    <div className="mx-auto py-14 px-4">
       <Heading title="Our Top Blogs" />
+      <div className="container">
+        <Slider {...settings}>
+          {blogData.map((blog, index) => {
+            const overlayRef = React.useRef(null);
 
-     <div className='container'>
-     <Slider {...settings}>
-        {blogData.map((blog, index) => (
-          <div key={index} className="p-4">
-            <div className="bg-gray-400/20 rounded-xl p-4 dark:text-white overflow-hidden shadow-md h-full flex flex-col">
-              <img src={blog.image} alt={blog.title} className="h-48 rounded-md w-full object-cover" />
-              <div className="h-full mt-4 min-h-40 flex flex-col justify-between flex-grow">
-                <h3 className="text-lg font-semibold mb-2">{blog.title}</h3>
-                <p className="mb-4 text-sm">{blog.snippet}</p>
-                <a
-                  href={blog.link}
-                  className="inline-block mt-auto text-white text-center text-sm bg-brandOrange px-4 py-2 rounded-md hover:bg-opacity-80 transition"
-                  aria-label='Read more about the blog'
-                >
-                  Read More
-                </a>
+            const handleMouseEnter = () => {
+              if (!overlayRef.current) return;
+              gsap.to(overlayRef.current, { y: '0%', opacity: 0.8, duration: 0.5, ease: "power1.out" });
+            };
+
+            const handleMouseLeave = () => {
+              if (!overlayRef.current) return;
+              gsap.to(overlayRef.current, { y: '-100%', opacity: 0, duration: 0.5, ease: "power1.in" });
+            };
+
+            return (
+              <div
+                key={index}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className="p-4"
+              >
+                <div className="bg-gray-400/20 rounded-xl p-4 dark:text-white overflow-hidden shadow-md h-full flex flex-col">
+                  <div className='h-[200px] relative overflow-hidden rounded-md bg-red-500'>
+                    <span
+                      ref={overlayRef}
+                      className='absolute w-full h-full top-0 left-0 bg-white opacity-0'
+                      style={{ transform: 'translateY(-100%)' }}
+                    ></span>
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="h-full rounded-md w-full object-cover"
+                    />
+                  </div>
+                  <div className="h-full mt-4 min-h-40 flex flex-col justify-between flex-grow">
+                    <h3 className="text-lg font-semibold mb-2">{blog.title}</h3>
+                    <p className="mb-4 text-sm">{blog.snippet}</p>
+                    <a
+                      href={blog.link}
+                      className="inline-block mt-auto text-white text-center text-sm bg-brandOrange px-4 py-2 rounded-md hover:bg-opacity-80 transition"
+                      aria-label='Read more about the blog'
+                    >
+                      Read More
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </Slider>
-     </div>
+            )
+          })}
+        </Slider>
+      </div>
     </div>
   );
 };

@@ -13,6 +13,8 @@ import PromoMarquee from './PromoMarquee';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from 'react';
+import { toast } from 'react-toastify'
+import Chatbot from '../../Chatbot'
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -47,6 +49,30 @@ useEffect(() => {
 }, [response?.products]);
 
 
+  useEffect(() => {
+    const messages = [
+      "John from New York just bought a Laptop!",
+      "Emily from London purchased a Phone Case.",
+      "Rajesh from Mumbai ordered a Bluetooth Speaker.",
+      "Sophia from Sydney grabbed a pair of Sneakers.",
+      "David from Toronto bought a Smartwatch."
+    ];
+
+    let index = 0;
+
+    const interval = setInterval(() => {
+      toast.success(messages[index], {
+         icon: "🛒",
+        position: "bottom-left",
+        autoClose: 5000,
+        className: "bg-brandOrange text-white font-semibold",
+      });
+      index = (index + 1) % messages.length; // loop through messages
+    }, 10000); // every 10 seconds
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, []);
+
 
   if (loading) {
     return <div className='flex gap-4 flex-wrap'>
@@ -63,6 +89,7 @@ useEffect(() => {
   return (
 
     <div className='relative bg-lightBg dark:bg-darkBg'>
+      <Chatbot></Chatbot>
       <BrandLogos></BrandLogos>
 
       <div className="relative mt-14 z-[5] ">
@@ -91,7 +118,7 @@ useEffect(() => {
         <div className='flex flex-wrap my-5 px-5 gap-2 md:gap-0'>
           <div className='md:w-5/12'>
             <Heading textAlign={"text-left"} title={"Frequently Asked Questions"}></Heading>
-            <p className='dark:text-lightBg '>Got questions? We’ve got answers.
+            <p className='dark:text-lightBg'>Got questions? We’ve got answers.
               Find answers to the most common questions about our services, features, and support. If you don’t see your question here, feel free to reach out!</p>
           </div>
           <Accordion></Accordion>

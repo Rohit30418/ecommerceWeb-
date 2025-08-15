@@ -91,7 +91,7 @@ useEffect(() => {
           <div className="flex flex-wrap items-center pl-5">
             {/* Left side - Text */}
             <div className="w-full md:w-6/12">
-              <h1 className="fade-up pb-5 text-4xl md:text-6xl lg:text-6xl font-extrabold">
+              <h1 className="fade-up pb-5 text-4xl lg:text-6xl font-extrabold">
                 Premium Sound Experience <span ref={textRef} className="text-brandOrange">{words[0]}</span>
               </h1>
 

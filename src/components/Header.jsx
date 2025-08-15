@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Menu } from "./utils/MenuData";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getAuth, signOut } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { toast } from "react-toastify";
 import { logoutUser } from "./Redux/UserSlice";
-import { useDispatch } from "react-redux";
-
+import { gsap } from "gsap";
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.userData);
@@ -26,9 +25,11 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const headerRef = useRef(null);
+
   const navigation = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
   // Sticky Header
   useEffect(() => {
     function handleScroll() {
@@ -44,9 +45,6 @@ const Header = () => {
     setDarkMode(!darkMode);
     document.documentElement.classList.toggle("dark");
   };
-
-
-  
 
   // Mobile width check
   useEffect(() => {
@@ -126,15 +124,13 @@ const Header = () => {
     [searchText]
   );
 
-
-
   function handleLogout() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-       dispatch(logoutUser());
-       toast.success("Logout successfully") 
-       navigation("/login")
+        dispatch(logoutUser());
+        toast.success("Logout successfully");
+        navigation("/login");
       })
       .catch((error) => {
         console.error("Logout failed", error);
@@ -143,10 +139,8 @@ const Header = () => {
 
   return (
     <>
-   
-
       <div
-       
+        ref={headerRef}
         className={`${isSticky ? "fixed top-0 left-0 right-0 z-30" : "static"}`}
       >
         {/* Top bar */}
@@ -160,56 +154,59 @@ const Header = () => {
             </span>
           </div>
 
-          <button className="bg-red-500" onClick={()=>{
-            toggleDark();
-          }}>toggle</button>
-
           <div className="flex gap-x-5 justify-end items-center">
             {!isLoggedin ? (
               <Link className="text-white font-black" to="/Login">
                 <i className="fas fa-user"></i> Login
               </Link>
             ) : (
+              <>
+                <button
+                  className="text-white text-xl"
+                  onClick={() => {
+                    toggleDark();
+                  }}
+                >
+                  {darkMode ? <i className="fa fa-sun"></i> : <i className="fa fa-moon"></i>}
+                </button>
 
-        <>
-        
-
-              <div
-                className="relative"
-                onMouseEnter={() => SetIsProfileDropActive(true)}
-                onMouseLeave={() => SetIsProfileDropActive(false)}
-              >
-   
-               <div class="flex  text-white gap-1 items-center">             <div class="social flex gap-2 mr-4 text-lg">
-  <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-  <a href="#" aria-label="X / Twitter"><i class="fab fa-x-twitter"></i></a>
-  <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-  <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-  <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-   
-</div> <p>Hi {userDetails?.firstName}</p>
-                <i className="fa fa-user text-white"></i></div>
-                {isProfileDropActive && (
-                  <div className="absolute bg-white w-[158px] z-[10000] right-[10px] shadow-lg h-[74px] rounded-sm p-1">
-                    <button className="block">
-                      <i className="fa fa-user"></i> <Link to="/order">My Orders</Link>
-                    </button>
-                    <button className="block mt-3" onClick={handleLogout}>
-                      <i className="fa fa-sign-out"></i> Logout
-                    </button>
+                <div
+                  className="relative"
+                  onMouseEnter={() => SetIsProfileDropActive(true)}
+                  onMouseLeave={() => SetIsProfileDropActive(false)}
+                >
+                  <div className="flex text-white gap-1 items-center">
+                    <p>Hi {userDetails?.firstName}</p>
+                    <i className="fa fa-user text-white"></i>
                   </div>
-                )}
-              </div>
-                 </>
+                  {isProfileDropActive && (
+                    <div className="absolute bg-white w-[158px] z-[10000] right-[10px] shadow-lg h-[74px] rounded-md p-1">
+                      <button className="block">
+                        <i className="fa fa-user"></i>{" "}
+                        <Link to="/order">My Orders</Link>
+                      </button>
+                      <button className="block mt-3" onClick={handleLogout}>
+                        <i className="fa fa-sign-out"></i> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
 
-            <Link className="text-white relative font-black" aria-label={isLoggedin?"login":"Cartnpm "} to={isLoggedin ? "/cart" : "/Login"}>
+            <Link
+              className="text-white relative font-black"
+              aria-label={isLoggedin ? "login" : "Cartnpm "}
+              to={isLoggedin ? "/cart" : "/Login"}
+            >
               Cart
-              {  Array.isArray(cartCount) && cartCount.length >= 0 && (
+              {Array.isArray(cartCount) && cartCount.length >= 0 && (
                 <>
-                 {isLoggedin && <small className="flex  absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
-                    {cartCount.length}
-                  </small>}
+                  {isLoggedin && (
+                    <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
+                      {cartCount.length}
+                    </small>
+                  )}
                   <i className="fa fa-shopping-cart" aria-hidden="true"></i>
                 </>
               )}
@@ -218,12 +215,11 @@ const Header = () => {
         </div>
 
         {/* Main Nav */}
-         <header
-      className={`lg:relative ${
-        location.pathname !== "/" && "dark:border-b-gray-400 border-b"
-      } bg-brandOrange lg:bg-white rounded-b-3xl dark:bg-darkBg lg:rounded-none w-full z-[1000]`}
-    >
-         
+        <header
+          className={`lg:relative  ${
+            location.pathname !== "/" && "dark:border-b-gray-400 border-b"
+          } bg-brandOrange lg:bg-white rounded-b-3xl dark:bg-darkBg lg:rounded-none w-full z-[1000]`}
+        >
           <nav className="flex gap-x-5 justify-between items-center px-5 py-5 text-black">
             {/* Logo */}
             <div>
@@ -240,8 +236,7 @@ const Header = () => {
                 onChange={search}
                 value={searchText}
                 placeholder="Search Items Here"
-               
-                className="text-black  outline-none bg-white lg:bg-gray-200/30  p-2  rounded-md w-full"
+                className="text-black outline-none bg-white lg:bg-gray-200/30 p-2 rounded-md w-full"
                 type="search"
               />
               <i className="fa fa-search absolute right-[10px] top-[50%] translate-y-[-50%] text-black"></i>
@@ -257,9 +252,9 @@ const Header = () => {
                               navigation(`/productCategory/${submenu}`);
                               setIsMenuOpened(false);
                               setSearchText("");
-                              setIsSearchDrop(false)
+                              setIsSearchDrop(false);
                             }}
-                            className="text-black  block"
+                            className="text-black block"
                           >
                             {highlightText(submenu, searchText)}
                           </button>
@@ -274,12 +269,12 @@ const Header = () => {
             </div>
 
             {/* Navigation Menu */}
-            <div  style={{"backgroundColor": `${isMobile?darkColor:""} `}}
-              className={`pt-3 lg:pt-0 overflow-auto lg:overflow-visible text-white lg:text-inherit menus lg:static px-5 lg:px-0  z-[1000] fixed bottom-0 transition-all duration-150 md:w-[40vw] top-0 w-[70vw]  ${
+            <div
+              style={{ backgroundColor: `${isMobile ? darkColor : ""}` }}
+              className={`pt-3 lg:pt-0 overflow-auto lg:overflow-visible text-white lg:text-inherit menus lg:static px-5 lg:px-0 z-[1000] fixed bottom-0 transition-all duration-150 md:w-[40vw] top-0 w-[70vw] ${
                 isMenuOpened ? "left-0" : "left-[-100%]"
               } bg-white lg:bg-transparent`}
             >
-
               <button
                 className="lg:hidden bg-red-600 text-white rounded-full absolute right-2 w-6 h-6"
                 onClick={() => setIsMenuOpened(false)}
@@ -287,46 +282,52 @@ const Header = () => {
                 <i className="fa fa-times"></i>
               </button>
 
- <div className="lg:hidden">
-              <img
-                src="https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png"
-                alt="Logo"
-                className="w-20"
-              />
-            </div>
+              <div className="lg:hidden">
+                <img
+                  src="https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png"
+                  alt="Logo"
+                  className="w-20"
+                />
+              </div>
+
               <ul className="flex pt-4 lg:pt-0 flex-col lg:flex-row justify-between lg:justify-end items-start gap-5 lg:items-center">
                 {Menu.map((menuitem) => (
                   <li
-                    className="lg:relative text-lg w-full dropmenu font-semibold"
+                    className="lg:relative text-md w-full dropmenu font-semibold"
                     key={menuitem.main}
                     onClick={(e) => {
                       e.stopPropagation();
                       if (isMobile) {
-                        setDropOpen((prev) => (prev === menuitem.main ? null : menuitem.main));
+                        setDropOpen(
+                          (prev) => (prev === menuitem.main ? null : menuitem.main)
+                        );
                       }
                     }}
                   >
                     <button
-  className={`dark:text-lightBg transition-all duration-300 hover:bg-brandOrange py-2 flex items-center gap-1 justify-between lg:justify-center lg:text-center text-left rounded-sm  px-1 w-full`}
->
-  {menuitem.main}
-  <i className={`${isDropOpen==menuitem.main ? "fa fa-angle-up" : "fa fa-angle-down"}`}></i>
-</button>
-
+                      className={`dark:text-lightBg transition-all duration-300 hover:bg-brandOrange py-2 flex items-center gap-1 justify-between lg:justify-center lg:text-center text-left rounded-sm px-1 w-full`}
+                    >
+                      {menuitem.main}
+                      <i
+                        className={`${
+                          isDropOpen == menuitem.main ? "fa fa-angle-up" : "fa fa-angle-down"
+                        }`}
+                      ></i>
+                    </button>
 
                     <div
                       className={`dropdown rounded-lg shadow-md ${
                         isDropOpen === menuitem.main ? "active" : ""
-                      } shadow lg:absolute transition-all duration-700 bg-transparent lg:bg-white text-white lg:text-black  top-full p-4 py-2`}
+                      } shadow lg:absolute transition-all duration-700 bg-transparent lg:bg-white text-white lg:text-black top-full p-4 py-2`}
                     >
                       <ul>
                         {menuitem.sub.map((submenu) => (
                           <li key={submenu}>
-                            <Link onClick={()=>{
-                            
-                              setIsMenuOpened(false);
-                              setDropOpen(null);
-                            }} 
+                            <Link
+                              onClick={() => {
+                                setIsMenuOpened(false);
+                                setDropOpen(null);
+                              }}
                               className="capitalize block mb-2 hover:text-brandOrange transition-all duration-300 whitespace-nowrap"
                               to={`/productCategory/${submenu}`}
                             >
@@ -343,7 +344,7 @@ const Header = () => {
 
             {/* Hamburger Menu Button */}
             <div className="block lg:hidden">
-              <button   aria-label="menu toggle" onClick={() => setIsMenuOpened(true)}>
+              <button aria-label="menu toggle" onClick={() => setIsMenuOpened(true)}>
                 <i className="fa fa-bars"></i>
               </button>
             </div>
@@ -351,11 +352,14 @@ const Header = () => {
         </header>
       </div>
 
-         {
-          isMenuOpened && <div onClick={()=>{
-            setIsMenuOpened(false)
-          }} className="bg-black/60  z-[20] fixed top-0 left-0 right-0 bottom-0 h-screen"></div>
-         }
+      {isMenuOpened && (
+        <div
+          onClick={() => {
+            setIsMenuOpened(false);
+          }}
+          className="bg-black/60 z-[20] fixed top-0 left-0 right-0 bottom-0 h-screen"
+        ></div>
+      )}
     </>
   );
 };
