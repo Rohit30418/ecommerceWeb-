@@ -68,7 +68,7 @@ useEffect(() => {
         className: "bg-brandOrange text-white font-semibold",
       });
       index = (index + 1) % messages.length; // loop through messages
-    }, 10000); // every 10 seconds
+    }, 20000); // every 10 seconds
 
     return () => clearInterval(interval); // cleanup on unmount
   }, []);
@@ -89,7 +89,7 @@ useEffect(() => {
   return (
 
     <div className='relative bg-lightBg dark:bg-darkBg'>
-      <Chatbot></Chatbot>
+
       <BrandLogos></BrandLogos>
 
       <div className="relative mt-14 z-[5] ">

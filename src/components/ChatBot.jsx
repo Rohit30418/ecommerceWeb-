@@ -14,9 +14,7 @@ const [isOpen,setIsOpen]=useState(false);
        </div>}
 
 
-        <img onClick={()=>{
-            setIsOpen(true)
-        }} src="https://miro.medium.com/v2/resize:fit:1200/1*9I6EIL5NG20A8se5afVmOg.gif" className='w-[70px] h-[70px] fixed right-2 bottom-8 rounded-full shadow-lg cursor-pointer bg-green-500 mix z-50' alt="" />
+      
     </div>
   )
 }

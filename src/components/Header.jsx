@@ -7,14 +7,13 @@ import { getDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { toast } from "react-toastify";
 import { logoutUser } from "./Redux/UserSlice";
-import { gsap } from "gsap";
+import { log } from "three/examples/jsm/nodes/Nodes.js";
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.userData);
   const isLoggedin = useSelector((state) => state?.user?.isLoggedIn);
   const cartCount = useSelector((state) => state?.user?.myCart || []);
   const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
-
   const [userDetails, setUserDetails] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [isSticky, setSticky] = useState(false);
@@ -24,8 +23,8 @@ const Header = () => {
   const [isSearchDrop, setIsSearchDrop] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [keyboardIndex, setKeyboardIndex] = useState(0);
   const headerRef = useRef(null);
-
   const navigation = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -38,7 +37,6 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
 
 
   const toggleDark = () => {
@@ -82,7 +80,7 @@ const Header = () => {
     function handleClickOutside(event) {
       if (headerRef.current && !headerRef.current.contains(event.target)) {
         setIsSearchDrop(false);
-      }
+    }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -123,6 +121,47 @@ const Header = () => {
       ),
     [searchText]
   );
+
+const itemRefs = useRef([]);
+
+// Keyboard navigation
+const handleKeyDown = (e) => {
+  if (!isSearchDrop) return;
+  if (e.key === "ArrowUp") {
+    setKeyboardIndex((prev) => Math.max(prev - 1, 0));
+  } else if (e.key === "ArrowDown") {
+    setKeyboardIndex((prev) =>
+      Math.min(prev + 1, filteredMenuItems.length - 1)
+    );
+  } else if (e.key === "Enter") {
+    const selectedItem = filteredMenuItems[keyboardIndex];
+    if (selectedItem) {
+      navigation(`/productCategory/${selectedItem}`);
+      setSearchText("");
+      setIsSearchDrop(false);
+      setKeyboardIndex(0);
+    }
+  }
+};
+
+// Scroll highlighted item into view whenever keyboardIndex changes
+useEffect(() => {
+  if (!isSearchDrop) return;
+  const currentItem = itemRefs.current[keyboardIndex];
+  if (currentItem) {
+    currentItem.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }
+}, [keyboardIndex, isSearchDrop]);
+
+// Attach listener only when dropdown is open
+useEffect(() => {
+  if (!isSearchDrop) return;
+  window.addEventListener("keydown", handleKeyDown);
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, [filteredMenuItems,isSearchDrop, keyboardIndex]);
 
   function handleLogout() {
     const auth = getAuth();
@@ -223,11 +262,7 @@ const Header = () => {
           <nav className="flex gap-x-5 justify-between items-center px-5 py-5 text-black">
             {/* Logo */}
             <div>
-              <img
-                src="https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png"
-                alt="Logo"
-                className="w-20"
-              />
+              <h1 className="font-bold text-4xl dark:text-white"><Link to="/">Kharee<span className="text-brandOrange">do</span></Link></h1>
             </div>
 
             {/* Search */}
@@ -245,16 +280,18 @@ const Header = () => {
                 <div ref={headerRef} className="meunulist absolute w-full top-[100%]">
                   <div className="h-40 overflow-auto shadow-md rounded-lg p-2 bg-white">
                     {filteredMenuItems.length > 0 ? (
-                      filteredMenuItems.map((submenu) => (
+                      filteredMenuItems.map((submenu,ind) => (
                         <div key={submenu}>
                           <button
+                            ref={(el)=>(itemRefs.current[ind]=el)}
+                            type="button"
                             onClick={() => {
                               navigation(`/productCategory/${submenu}`);
                               setIsMenuOpened(false);
                               setSearchText("");
                               setIsSearchDrop(false);
                             }}
-                            className="text-black block"
+                            className={`text-black ${ind==keyboardIndex && "bg-brandOrange text-white "} px-2 rounded-md py-1 text-left w-full block`}
                           >
                             {highlightText(submenu, searchText)}
                           </button>
@@ -328,7 +365,7 @@ const Header = () => {
                                 setIsMenuOpened(false);
                                 setDropOpen(null);
                               }}
-                              className="capitalize block mb-2 hover:text-brandOrange transition-all duration-300 whitespace-nowrap"
+                              className="capitalize block text-left  mb-2 hover:text-brandOrange transition-all duration-300 whitespace-nowrap"
                               to={`/productCategory/${submenu}`}
                             >
                               {submenu}

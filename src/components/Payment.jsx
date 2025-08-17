@@ -10,12 +10,12 @@ const Payment = () => {
   const uid = useSelector((state) => state?.user?.userData?.uid);
   const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState("");
-
+  
   // Modal & payment state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentResult, setPaymentResult] = useState(null); // "success" or "failure"
-
+  const totalprice=localStorage.getItem("totalPrice") || 0;
   // Card form state
   const [cardData, setCardData] = useState({
     cardNumber: "",
@@ -137,9 +137,9 @@ const Payment = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br px-4">
-      <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full animate-fade-in">
-        <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">
+    <div className="flex items-center justify-center min-h-[50vh] py-8 bg-gradient-to-br px-4">
+      <div className="bg-white dark:text-white dark:bg-gray-400/20 shadow-2xl rounded-2xl p-8 max-w-md w-full animate-fade-in">
+        <h3 className="text-2xl font-bold text-center mb-6 dark:text-white text-gray-800">
           Complete Your Payment
         </h3>
 
@@ -157,7 +157,7 @@ const Payment = () => {
               className="accent-black"
             />
             <i className="fas fa-money-bill-wave text-xl text-green-600"></i>
-            <span className="text-lg font-medium text-gray-700">
+            <span className="text-lg font-medium dark:text-white text-gray-700">
               Cash on Delivery
             </span>
           </div>
@@ -175,7 +175,7 @@ const Payment = () => {
               className="accent-black"
             />
             <i className="fas fa-credit-card text-xl text-blue-500"></i>
-            <span className="text-lg font-medium text-gray-700">
+            <span className="text-lg font-medium  dark:text-white text-gray-700">
               Credit/Debit Card
             </span>
           </div>
@@ -193,7 +193,7 @@ const Payment = () => {
               className="accent-black"
             />
             <i className="fas fa-mobile-alt text-xl text-purple-500"></i>
-            <span className="text-lg font-medium text-gray-700">UPI / Wallet</span>
+            <span className="text-lg font-medium  dark:text-white text-gray-700">UPI / Wallet</span>
           </div>
         </div>
 
@@ -216,14 +216,14 @@ const Payment = () => {
                   setPaymentResult(null);
                 }
               }}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
+              className="absolute top-3 right-3   text-gray-600 hover:text-gray-900"
             >
               ✕
             </button>
 
             {!paymentResult && (
               <>
-                <h3 className="text-xl font-semibold mb-4">Fake Payment Gateway</h3>
+                <h3 className="text-xl font-semibold mb-4"> Payment Gateway</h3>
                 <p className="mb-4">
                   You selected <strong>{selectedMethod}</strong>.{" "}
                   {selectedMethod === "Credit/Debit Card"
@@ -249,7 +249,7 @@ const Payment = () => {
                       className="w-full p-2 border rounded"
                       required
                     />
-                    <div className="flex space-x-4">
+            
                       <input
                         name="expiry"
                         type="text"
@@ -257,7 +257,7 @@ const Payment = () => {
                         placeholder="MM/YY"
                         value={cardData.expiry}
                         onChange={handleCardInput}
-                        className="flex-1 p-2 border rounded"
+                        className="flex-1 w-full p-2 border rounded"
                         required
                       />
                       <input
@@ -267,10 +267,10 @@ const Payment = () => {
                         placeholder="CVV"
                         value={cardData.cvv}
                         onChange={handleCardInput}
-                        className="flex-1 p-2 border rounded"
+                        className="flex-1 w-full p-2 border rounded"
                         required
                       />
-                    </div>
+                
                     <input
                       name="name"
                       type="text"
@@ -286,7 +286,7 @@ const Payment = () => {
                       disabled={isProcessing}
                       className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition disabled:opacity-50"
                     >
-                      {isProcessing ? "Processing..." : "Pay ₹999"}
+                      {isProcessing ? "Processing..." : "Pay ₹" + totalprice}
                     </button>
                   </form>
                 )}
@@ -297,7 +297,7 @@ const Payment = () => {
                     disabled={isProcessing}
                     className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition disabled:opacity-50"
                   >
-                    {isProcessing ? "Processing..." : "Pay ₹999"}
+                             {isProcessing ? "Processing..." : "Pay ₹" + totalprice}
                   </button>
                 )}
               </>

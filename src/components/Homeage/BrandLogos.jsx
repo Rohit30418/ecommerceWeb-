@@ -47,7 +47,6 @@ const settings = {
 };
 
 const BrandLogos = () => {
-  const LightColor = useSelector((state) => state.LightColor.LightColor);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">

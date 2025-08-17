@@ -18,6 +18,7 @@ import Register from './components/Register';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Loader } from '@react-three/drei';
+import Chatbot from './Chatbot';
 
 // Lazy-loaded components
 const AboutProduct = lazy(() => import('./components/AboutProduct'));
@@ -31,6 +32,7 @@ const AppLayout = () => {
     <div className='bg-white dark:bg-darkBg'>
       <Header />
       <main >
+        <Chatbot />
         <Outlet />
       </main>
       <Footer />

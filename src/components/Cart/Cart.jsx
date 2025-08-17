@@ -69,12 +69,12 @@ const Cart = () => {
   return (
     <>
 
-      <div className="flex flex-col md:flex-row justify-between px-4 md:px-8 pt-6 gap-6">
+      <div className="flex flex-col my-8 md:flex-row justify-between px-4 md:px-8  gap-6">
         {/* Left Column - Cart Items */}
         <div className="md:w-7/12">
           {!isCheckOut ? (
-            <div className="bg-white shadow-md rounded-lg p-4">
-              <h1 className="text-3xl font-semibold mb-4"> <i className='fa fa-shopping-cart'></i> Shopping Cart ({cartItems.length})</h1>
+            <div className="bg-white dark:text-white dark:bg-gray-400/20 shadow-md rounded-lg p-4">
+              <h1 className="text-xl font-semibold mb-4"> <i className='fa fa-shopping-cart'></i> Shopping Cart ({cartItems.length})</h1>
               {cartItems.slice((pageNo - 1) * 3, pageNo * 3).map((item) => (
                 <div key={item.id} className="flex items-center justify-between p-4 mb-4 border rounded-lg hover:shadow-sm transition">
                   <img src={item.thumbnail} alt={item.title} className="w-16 h-16 object-cover rounded" />
@@ -117,18 +117,18 @@ const Cart = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white shadow-md rounded-lg p-6 space-y-6">
+            <div className="bg-white dark:text-white dark:bg-gray-400/20 shadow-md rounded-lg p-6 space-y-6">
               <h2 className="text-2xl font-bold mb-4"><i class="fas fa-cash-register"></i> Checkout</h2>
-              <div className="bg-gray-100 p-4 rounded">
+              <div className="bg-gray-100 dark:bg-gray-100/20 p-4 rounded">
                 <h3 className="font-medium text-lg"><i className='fa fa-user'></i> Name</h3>
                 <p>{userDetails?.firstName} {userDetails?.lastName}</p>
               </div>
-              <div className="bg-gray-100 p-4 rounded">
+              <div className="bg-gray-100 dark:bg-gray-100/20 p-4 rounded">
                 <h3 className="font-medium text-lg"><i class="fas fa-map-marker-alt pr-2"></i> 
   Shipping Address</h3>
                 <p>{userDetails?.address}</p>
               </div>
-              <div className="bg-gray-100 p-4 rounded">
+              <div className="bg-gray-100 dark:bg-gray-100/20 p-4 rounded">
                 <h3 className="font-medium text-lg"><i class="fas fa-envelope pr-2"></i> 
   Confirmation Email</h3>
                 <p>{userDetails?.email}</p>
@@ -136,7 +136,12 @@ const Cart = () => {
 
               <div className="flex space-x-4">
                 <button onClick={() => setIsCheckOut(false)} className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Back</button>
-                <button onClick={() => navigate("/Payment")} className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">Continue</button>
+                <button onClick={() => {
+                  navigate("/Payment");
+                  localStorage.setItem("totalPrice", totalPrice);
+                }
+                  
+                } className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">Continue</button>
               </div>
             </div>
           )}
@@ -144,8 +149,8 @@ const Cart = () => {
 
         {/* Right Column - Order Summary */}
         <div className="md:w-4/12">
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4"><i class="fas fa-receipt pr-2"></i> 
+          <div className="bg-white dark:bg-gray-400/20 dark:text-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4"><i class="fas fa-receipt pr-2"></i> 
   Order Summary</h2>
             <div className="flex justify-between text-lg mb-2">
               <span>Total Price:</span>
