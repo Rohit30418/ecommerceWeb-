@@ -26,9 +26,10 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    setIsLoading(true);
+  
     e.preventDefault();
     if (validateForm()) {
+        setIsLoading(true);
       try {
       
         const res = await signInWithEmailAndPassword(auth, loginData.userid, loginData.password);
@@ -37,9 +38,16 @@ const Login = () => {
         toast.success("Login successful")
         navigate('/');
       } catch (error) {
+     
         setErrorMsg({ general: error.message });
+ 
       }
+
+        
     }
+
+        
+
   };
 
   useEffect(() => {

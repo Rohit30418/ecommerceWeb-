@@ -11,67 +11,76 @@ const MyOrder = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">My Orders</h2>
+      {/* <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">My Orders</h2> */}
 
       {cartItems.length === 0 ? (
-        <div className="text-center text-gray-500 text-lg">
+        <div className="text-center text-gray-500 dark:text-brandOrange text-lg">
           You have no orders yet.
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="items-end grid grid-cols-1 md:grid-cols-2  gap-6">
           {cartItems.map((item, index) => {
             const currentStatusIndex = getStatusIndex(item.status);
 
             return (
               <div
                 key={index}
-                className="border rounded-xl shadow-md hover:shadow-lg transition duration-200 bg-white p-4"
+                className="border rounded-xl min-h-[250px]  mt-0  shadow-md hover:shadow-lg transition duration-200 bg-white dark:bg-gray-400/20  p-4"
               >
                 <div className="flex items-center gap-4">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.name}
-                    className="w-24 h-24 object-cover rounded-lg"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-600">
-                      Quantity: <span className="font-medium">{item.quantity}</span>
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Payment: <span className="font-medium">{item.paymentMethod}</span>
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Ordered on:{' '}
-                      <span className="font-medium">
-                        {format(new Date(item.orderDate), 'dd MMM yyyy')}
-                      </span>
-                    </p>
-                    <p className="text-lg font-bold text-indigo-600 mt-1">
-                      ₹{item.price?.toFixed(2)}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Timeline */}
+                     {/* Timeline */}
                 <div className="mt-6 ml-4 border-l-4 border-indigo-300 pl-4">
                   {statusSteps.map((step, i) => (
                     <div key={i} className="relative mb-4">
+                      {/* Ripple effect for active steps */}
+                      {i <= currentStatusIndex && (
+                        <span className="ripple"></span>
+                      )}
                       <div
-                        className={`absolute -left-5 w-4 h-4 rounded-full ${
-                          i <= currentStatusIndex ? 'bg-indigo-600' : 'bg-gray-300'
+                        className={`absolute -left-[26px] w-4 h-4 rounded-full ${
+                          i <= currentStatusIndex ? 'bg-brandOrange' : 'bg-gray-300'
                         }`}
+                        style={{ zIndex: 1 }}
                       />
                       <p
                         className={`text-sm ${
-                          i <= currentStatusIndex ? 'text-indigo-800 font-semibold' : 'text-gray-500'
+                          i <= currentStatusIndex ? 'text-brandOrange font-semibold' : 'text-gray-500'
                         }`}
                       >
                         {step}
                       </p>
                     </div>
                   ))}
+                  
                 </div>
+                 
+                  <div className="flex items-center gap-4 flex-col md:flex-row">
+                     <img
+                    src={item.thumbnail}
+                    alt={item.name}
+                    className="w-24 h-24 object-cover rounded-lg"
+                  />
+                   <div> <h3 className="md:text-xl font-semibold text-gray-900  dark:text-white">{item.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-white">
+                      Quantity: <span className="font-medium">{item.quantity}</span>
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-white">
+                      Payment: <span className="font-medium">{item.paymentMethod}</span>
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-white">
+                      Ordered on:{' '}
+                      <span className="font-medium">
+                        {format(new Date(item.date), 'dd MMM yyyy')}
+                      </span>
+                    </p>
+                    <p className="md:text-lg font-bold text-brandOrange mt-1">
+                      ₹{item.price?.toFixed(2)}
+                    </p></div>
+                  </div>
+                </div>
+
+             
               </div>
             );
           })}

@@ -15,6 +15,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from 'react';
 import { toast } from 'react-toastify'
 import Chatbot from '../../Chatbot'
+import { LandingMain } from './Landingmain'
+import LandingPage from './Landingpage'
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -100,7 +102,7 @@ useEffect(() => {
           <Timer></Timer>
         </div>
 
-        <div ref={cardsContainerRef} className='grid  gap-5 sm:grid-cols-2 xl:grid-cols-4  container'>
+        <div ref={cardsContainerRef} className='grid  gap-5 px-5 grid-cols-2 xl:grid-cols-4  container'>
           {
             response?.products?.map((item, ind) => {
               return <ProductCard item={item} id={item.id} key={item.id}></ProductCard>
@@ -114,8 +116,13 @@ useEffect(() => {
       </div>
 
 
+      <div>
+        {/* <LandingPage file={"gltf/iphone_14_pro.glb"}></LandingPage> */}
+      </div>
+
+
       <div className="container">
-        <div className='flex flex-wrap my-5 px-5 gap-2 md:gap-0'>
+        <div className='flex text-sm sm:text-lg flex-wrap my-5 px-5 gap-2 md:gap-0'>
           <div className='md:w-5/12'>
             <Heading textAlign={"text-left"} title={"Frequently Asked Questions"}></Heading>
             <p className='dark:text-lightBg'>Got questions? We’ve got answers.

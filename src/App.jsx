@@ -1,11 +1,10 @@
-import React, { useState, Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Route, Routes, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './components/Redux/Store';
 import ErrorPage from './ErrorPage';
 import UserAuth from './components/UserAuth';
 import { LandingMain } from './components/Homeage/Landingmain';
-import { DarkColorCom } from './components/DarkColorCom';
 import Thanks from './components/Thanks';
 import Payment from './components/Payment';
 import MyOrder from './components/MyOrder';
@@ -17,8 +16,8 @@ import FatchOrderItems from './components/FatchOrderItems';
 import Register from './components/Register';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/ProtectedRoute';
-import { Loader } from '@react-three/drei';
 import Chatbot from './Chatbot';
+import Loader from './Loader';
 
 // Lazy-loaded components
 const AboutProduct = lazy(() => import('./components/AboutProduct'));
@@ -32,6 +31,7 @@ const AppLayout = () => {
     <div className='bg-white dark:bg-darkBg'>
       <Header />
       <main >
+      
         <Chatbot />
         <Outlet />
       </main>
@@ -46,18 +46,14 @@ function App() {
     <Provider store={store}>
       <ToastContainer theme="colored" />
       <UserAuth />
-      <DarkColorCom />
       <FatchCartItems />
       <FatchOrderItems />    
 
       <div className="w-full">
         <Suspense
-          fallback={
-            <Loader></Loader>
-          }
+          fallback={<Loader/>}
         >
           <ChatBot />
-
           <Routes>
             <Route path="/" element={<AppLayout />}>
               <Route index element={<LandingMain />} />
@@ -72,11 +68,10 @@ function App() {
 
               <Route element={<ProtectedRoute />}>
                 <Route path="Order" element={<MyOrder />} />
-                <Route path="Cart" element={<Cart />} />
                 <Route path="Thanks" element={<Thanks />} />
                 <Route path="Payment" element={<Payment />} />
               </Route>
-
+              <Route path="Cart" element={<Cart />} />
               <Route path="*" element={<ErrorPage />} />
             </Route>
           </Routes>

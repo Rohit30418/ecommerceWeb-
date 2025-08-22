@@ -91,11 +91,11 @@ useEffect(() => {
           <div className="flex flex-wrap items-center pl-5">
             {/* Left side - Text */}
             <div className="w-full md:w-6/12">
-              <h1 className="fade-up pb-5 text-4xl lg:text-6xl font-extrabold">
+              <h1 className="fade-up pb-5 text-3xl lg:text-6xl font-extrabold">
                 Premium Sound Experience <span ref={textRef} className="text-brandOrange">{words[0]}</span>
               </h1>
 
-              <p className="fade-up dark:text-darkText">
+              <p className="fade-up text-sm sm:text-lg dark:text-darkText">
                 Discover the perfect blend of cutting-edge technology and
                 unmatched comfort with our exclusive range of headphones.
                 Whether you're an audiophile, a gamer, or simply enjoy
@@ -103,7 +103,7 @@ useEffect(() => {
               </p>
 
               <div className="fade-up mt-5">
-                <button className="p-3 bg-brandOrange rounded-md hover:-translate-y-1 duration-150 transition-all text-white">
+                <button className="p-2 sm:p-3 bg-brandOrange rounded-md hover:-translate-y-1 duration-150 transition-all text-white">
                   Explore Now <i className='fa fa-arrow-right'></i>
                 </button>
               </div>
@@ -111,7 +111,7 @@ useEffect(() => {
 
             {/* Right side - Modal / Product */}
             <div className="w-full md:w-6/12" ref={modalRef}>
-              <LandingPage />
+              <LandingPage file="gltf/sony_headphone_wh-1000xm4.glb" />
             </div>
           </div>
         </div>

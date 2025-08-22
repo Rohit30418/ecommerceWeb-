@@ -15,10 +15,8 @@ const ProductCard = ({ item }) => {
   const iconsRef = useRef(null);
   const userId = useSelector((state) => state?.user?.userData?.uid)
   
-  const color = useSelector((state) => state.color.color);
-  const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
-  const lightColor = useSelector((state) => state?.LightColor?.LightColor);
-  const dispatch = useDispatch();
+
+
 
   // let noOfClick=1;
 
@@ -34,6 +32,26 @@ const ProductCard = ({ item }) => {
 
   async function AddToCart() {
     const id = Date.now(); // Generate a unique ID for the toast
+
+    if (!userId && userId==undefined) {
+     const exisitingCartItem = JSON.parse(localStorage.getItem("cartItem"));
+        const newCartItem = {
+        tempid:Date.now(),
+        itemId: item.id,
+        title: item.title,
+        price: item.price,
+        discountPercentage: item.discountPercentage,
+        thumbnail: item?.thumbnail,
+        quantity: 1,
+        status: "Placed",
+        date: new Date().toISOString(),
+      }
+      
+      const updatedCartItem = exisitingCartItem? [...exisitingCartItem, newCartItem]:[newCartItem];
+
+      localStorage.setItem("cartItem", JSON.stringify(updatedCartItem));
+    }else{
+
     try {
       const userDocRef = doc(db, 'users', userId);
       const cartCollectionRef = collection(userDocRef, 'cart');
@@ -44,6 +62,8 @@ const ProductCard = ({ item }) => {
         discountPercentage: item.discountPercentage,
         thumbnail: item?.thumbnail,
         quantity: 1,
+        status: "Placed",
+        date: new Date().toISOString(),
       });
 
       // dispatch();
@@ -58,6 +78,12 @@ const ProductCard = ({ item }) => {
     } catch (error) {
       alert(error.message);
     }
+    }
+
+
+
+
+
   }
 
   return (
@@ -72,14 +98,14 @@ const ProductCard = ({ item }) => {
     >
       <div
         ref={iconsRef}
-        className='product_card rounded-md relative bg-gray-200 dark:bg-gray-400/10  p-5 overflow-hidden block h-100 min-h-80 text-left'
+        className='product_card rounded-md relative bg-gray-200 dark:bg-gray-400/10 p-2 sm:p-5 overflow-hidden block h-100 min-h-40 text-left'
       >
         <div className='flex p-1 flex-col icons gap-3 top-2 absolute z-10 right-2'>
-          <i className='fa fa-heart text-lg text-white rounded-sm w-10 h-10 grid place-content-center translate-x-[60px]  bg-brandOrange'  ></i>
-          <i className='fa fa-cart-shopping text-lg text-white w-10 rounded-sm h-10 grid place-content-center translate-x-[60px] cursor-pointer bg-brandOrange' onClick={AddToCart}></i>
-          <Link to={`/ProductDetail/${item.id}`} al><i className='fa fa-eye rounded-sm text-lg text-white w-10 h-10 grid place-content-center translate-x-[60px]  bg-brandOrange' ></i></Link>
+          <i className='fa fa-heart sm:text-lg text-white rounded-sm w-10 h-10 grid place-content-center translate-x-[60px]  bg-brandOrange'  ></i>
+          <i className='fa fa-cart-shopping sm:text-lg text-white w-10 rounded-sm h-10 grid place-content-center translate-x-[60px] cursor-pointer bg-brandOrange' onClick={AddToCart}></i>
+          <Link to={`/ProductDetail/${item.id}`} al><i className='fa fa-eye rounded-sm sm:text-lg text-white w-10 h-10 grid place-content-center translate-x-[60px]  bg-brandOrange' ></i></Link>
         </div>
-        <div className='h-60 overflow-hidden bg-white rounded-md'>
+        <div className='  h-[150px] md:h-60 overflow-hidden bg-white rounded-md'>
   
          <img
             src={item?.thumbnail}
@@ -89,9 +115,9 @@ const ProductCard = ({ item }) => {
        
         </div>
         <div className='py-4'>
-          <p className='mb-3 text-lg dark:text-darkText whitespace-nowrap  font-medium'>{item.title}</p>
-          <div className='flex justify-between items-center'>
-            <p><i className="fas fa-rupee-sign text-white"></i> <span className='text-green-400 font-bold'>{Math.floor(Math.floor(item.price * 85)*(1-item.discountPercentage/100))}</span> <s className='text-red-400'>{Math.floor(item.price * 85)} </s>  </p>
+          <p className='mb-3 text-sm sm:text-lg dark:text-darkText whitespace-nowrap  font-medium'>{item.title}</p>
+          <div className='flex justify-between flex-wrap gap-2 items-center'>
+            <p className='text-sm'><i className="fas fa-rupee-sign text-brandOrange"></i> <span className='text-green-600 font-bold'>{Math.floor(Math.floor(item.price * 85)*(1-item.discountPercentage/100))}</span> <s className='text-red-600'>{Math.floor(item.price * 85)} </s>  </p>
             {/* <p className='absolute top-2 text-white left-2 bg-brandOrange rounded-full p-1'> {item.discountPercentage}% off</p> */}
             <Starrate rating={Math.floor(item?.rating) }  />
           </div>
@@ -101,5 +127,4 @@ const ProductCard = ({ item }) => {
     </>
   );
 };
-
 export default ProductCard;

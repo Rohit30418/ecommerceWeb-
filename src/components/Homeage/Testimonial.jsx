@@ -66,7 +66,6 @@ const renderStars = (rating) => {
 };
 
 const Testimonial = () => {
-  const color = useSelector((state) => state.color.color);
   const containerRef = useRef(null);
   const bgRef = useRef(null);
   const cardsRef = useRef([]);
@@ -129,7 +128,7 @@ const Testimonial = () => {
               key={index}
               ref={(el) => (cardsRef.current[index] = el)}
               className="dark:bg-gray-400/20  p-6 rounded-2xl h-full transition-all  flex flex-col justify-between border"
-              style={{ borderColor: color }}
+            
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -138,7 +137,7 @@ const Testimonial = () => {
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-20 h-20 rounded-full object-cover border-2"
-                  style={{ borderColor: color }}
+                  
                 />
                 <p className="italic text-sm">"{testimonial.quote}"</p>
                 <div className="flex gap-1">{renderStars(testimonial.rating)}</div>

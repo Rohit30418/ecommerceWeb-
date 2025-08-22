@@ -11,5 +11,5 @@ export const Starrate = ({ rating }) => {
     }
   }
 
-  return <div className="flex gap-1">{stars}</div>;
+  return <div className="flex text-sm  gap-1">{stars}</div>;
 };

@@ -143,6 +143,10 @@ const handleRangeChange = (value) => {
     setIsmobileFilterActive(false);
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pageNo, Category]);
+
   return (
     <>
       {isOverlayActive && (
@@ -154,7 +158,7 @@ const handleRangeChange = (value) => {
 
  
 
-      <div className="flex lg:hidden justify-center py-3 gap-4">
+      <div className="flex dark:text-white lg:hidden justify-center py-3 gap-4">
         <button className="border p-2" onClick={openSortMobile}>
           Sort <i className="fa-solid fa-arrow-up"></i> <i className="fa-solid fa-arrow-down"></i>
         </button>
@@ -169,7 +173,7 @@ const handleRangeChange = (value) => {
           <div className={`
   fixed lg:static 
   top-0 bottom-0 right-0 
-  bg-gray-400/20  rounded-md p-4 w-7/12 md:w-full z-40 
+ bg-white lg:bg-gray-400/20 rounded-md p-4 w-7/12 md:w-full z-40 
   transition ease-in-out duration-300 
   ${isMobile ? (isMobileFilterActive ? 'translate-x-0' : 'translate-x-full') : 'translate-x-0'} 
   lg:translate-x-0
@@ -202,7 +206,7 @@ const handleRangeChange = (value) => {
           </div>
 
            {/* Sort Panel */}
-        <div className={`fixed lg:static ${isMobile?isMobileSortActive ? "translate-y-0" : "translate-y-full":"translate-y-0"} bottom-0 bg-gray-400/20 shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md lg:w-full lg:mt-4 transition ease-in-out duration-300 p-3`}>
+        <div className={`fixed lg:static ${isMobile?isMobileSortActive ? "translate-y-0" : "translate-y-full":"translate-y-0"}  bottom-0 bg-white dark:text-black dark:lg:text-white lg:bg-gray-400/20  shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md lg:w-full lg:mt-4 transition ease-in-out duration-300 p-3`}>
           <button className="block mb-4" onClick={lowToHighPrice}>
             Price Low to High <i className="fa-solid fa-arrow-up"></i>
           </button>
@@ -222,24 +226,28 @@ const handleRangeChange = (value) => {
             filteredData.slice((pageNo - 1) * 6, pageNo * 6).map((item) => (
               <ProductCard key={item.id} item={item} />
             ))
+
+            
           )}
+
+          
         </div>
       </div>
 
       {/* Pagination */}
       {filteredData.length > 6 && (
-        <div className="flex gap-5 justify-center mt-4">
+        <div className="flex gap-5 justify-center mt-4 mb-5">
           {pageNo > 1 && <button onClick={() => setPageNo(pageNo - 1)}>Prev</button>}
           {[...Array(totalPages)].map((_, ind) => (
             <button
               key={ind}
               onClick={() => setPageNo(ind + 1)}
-              className={`p-2 ${pageNo === ind + 1 ? 'bg-blue-500 text-white' : ''}`}
+              className={`p-2 rounded-md px-4  ${pageNo === ind + 1 ? 'bg-brandOrange text-white' : ''}`}
             >
               {ind + 1}
             </button>
           ))}
-          {pageNo < totalPages && <button onClick={() => setPageNo(pageNo + 1)}>Next</button>}
+          {pageNo < totalPages && <button className='p-2 rounded-md px-4' onClick={() => setPageNo(pageNo + 1)}>Next</button>}
         </div>
       )}
     </>

@@ -13,7 +13,7 @@ const Model = forwardRef(({ scene, color }, ref) => {
     if (scene) {
       scene.traverse((child) => {
         if (child.isMesh && child.material) {
-          child.material.color.set("orange");
+          child.material.color.set(color);
           child.castShadow = true;
           child.receiveShadow = true;
         }
@@ -24,7 +24,7 @@ const Model = forwardRef(({ scene, color }, ref) => {
   return (
     <primitive
       ref={ref}
-      scale={1.8}
+      scale={1.9}
       dispose={null}
       position={[-1, -1.4, -0.5]}
       // Don't set rotation here, let GSAP control it
@@ -33,8 +33,8 @@ const Model = forwardRef(({ scene, color }, ref) => {
   );
 });
 
-const LandingPage = () => {
-  const { scene } = useGLTF('gltf/sony_headphone_wh-1000xm4.glb');
+const LandingPage = ({file}) => {
+  const { scene } = useGLTF(file);
   const modelRef = useRef(null);
   const containerRef = useRef(null);
   const controlsRef = useRef(null);
@@ -42,11 +42,10 @@ const LandingPage = () => {
   const colorType = useSelector((state) => state.color.color);
 
   const colorOptions = [
-    '#000000',
-    '#2a3c29',
-    '#613e3e',
-    '#071f3f',
-    '#ffdbae',
+    "black",
+    'red',
+    'blue',
+    'green',
   ];
 
   // Wait for refs and scene to be ready, then setup GSAP
@@ -65,7 +64,6 @@ const LandingPage = () => {
           scrollTrigger: {
             trigger: containerRef.current,
             start: 'top 100%',
-  
             scrub: 5,
             markers: false,
           },
@@ -141,7 +139,7 @@ const LandingPage = () => {
       style={{ width: '100%', position: 'relative' }}
       aria-label="3D headphone model viewer"
       role="region"
-      className='h-[30vh] md:h-[80vh]'
+      className='h-[40vh] md:h-[80vh]'
     >
       <Canvas
         style={{ width: '100%', height: '100%' }}
@@ -159,13 +157,13 @@ const LandingPage = () => {
         />
         <ambientLight intensity={5} />
         <Suspense fallback={null}>
-          <OrbitControls ref={controlsRef} />
+          <OrbitControls enableZoom={false} ref={controlsRef} />
           <Model ref={modelRef} scene={scene} color={colorType} />
         </Suspense>
       </Canvas>
 
       <div
-        className="flex gap-2 rounded-lg justify-center px-3 py-2 items-center bg-slate-400 absolute bottom-[-10px] left-1/2 transform -translate-x-1/2"
+        className="flex gap-2 rounded-lg justify-center flex-col px-3 py-2 items-center bg-slate-400 absolute top-[47%] right-[-10px] transform -translate-x-1/2"
         role="group"
         aria-label="Color selection"
       >

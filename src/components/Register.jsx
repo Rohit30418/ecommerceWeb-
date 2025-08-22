@@ -3,10 +3,12 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import fatchApiCountryStateCity from "./fatchApi/fatchApiCountryStateCity";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Register = ({ toggleToste }) => {
+
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen dark:bg-darkBg flex items-center justify-center px-4 my-5">
@@ -48,8 +50,10 @@ const Register = ({ toggleToste }) => {
             } catch (error) {
               console.error(error);
             } finally {
-              toast.success("Registration Successfull")
+              toast.success("Registration Successfull");
+              navigate("/login");
               setSubmitting(false);
+              Formik.resetForm();
             }
           }}
         >

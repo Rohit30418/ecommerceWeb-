@@ -22,12 +22,17 @@ const Header = () => {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [isSearchDrop, setIsSearchDrop] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(()=>localStorage.getItem("darkMode") === "true" || false);
   const [keyboardIndex, setKeyboardIndex] = useState(0);
   const headerRef = useRef(null);
   const navigation = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
+const localstorageCart = JSON.parse(localStorage.getItem("cartItem")) || [];
+
+  
+
 
   // Sticky Header
   useEffect(() => {
@@ -41,8 +46,15 @@ const Header = () => {
 
   const toggleDark = () => {
     setDarkMode(!darkMode);
-    document.documentElement.classList.toggle("dark");
+    localStorage.setItem("darkMode", !darkMode);
   };
+
+  useEffect(() => {
+        document.documentElement.classList.remove("dark", "light");
+        document.documentElement.classList.toggle(!darkMode ? "dark" : "light");
+  }, [darkMode]);
+  
+
 
   // Mobile width check
   useEffect(() => {
@@ -71,7 +83,6 @@ const Header = () => {
         console.error("Error fetching user details:", error);
       }
     }
-
     getUserData();
   }, [user?.uid]);
 
@@ -98,11 +109,10 @@ const Header = () => {
 
   const highlightText = (text, searchText) => {
     if (!searchText) return text;
-
     const startIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
     if (startIndex === -1) return text;
-
     const endIndex = startIndex + searchText.length;
+
     return (
       <>
         {text.substring(0, startIndex)}
@@ -170,11 +180,14 @@ useEffect(() => {
         dispatch(logoutUser());
         toast.success("Logout successfully");
         navigation("/login");
+        SetIsProfileDropActive(false);
       })
       .catch((error) => {
         console.error("Logout failed", error);
       });
   }
+
+console.log(localstorageCart.length);
 
   return (
     <>
@@ -193,14 +206,8 @@ useEffect(() => {
             </span>
           </div>
 
-          <div className="flex gap-x-5 justify-end items-center">
-            {!isLoggedin ? (
-              <Link className="text-white font-black" to="/Login">
-                <i className="fas fa-user"></i> Login
-              </Link>
-            ) : (
-              <>
-                <button
+           <div className="flex gap-5">
+            <button
                   className="text-white text-xl"
                   onClick={() => {
                     toggleDark();
@@ -208,6 +215,15 @@ useEffect(() => {
                 >
                   {darkMode ? <i className="fa fa-sun"></i> : <i className="fa fa-moon"></i>}
                 </button>
+
+          <div className="flex gap-x-5 justify-end items-center">
+            {!isLoggedin ? (
+              <Link className="text-white font-black" to="/Login">
+                <i className="fas fa-user"></i> Login
+              </Link>
+            ) : (
+              <>
+               
 
                 <div
                   className="relative"
@@ -236,21 +252,37 @@ useEffect(() => {
             <Link
               className="text-white relative font-black"
               aria-label={isLoggedin ? "login" : "Cartnpm "}
-              to={isLoggedin ? "/cart" : "/Login"}
+              to={"/cart"}
             >
               Cart
-              {Array.isArray(cartCount) && cartCount.length >= 0 && (
-                <>
-                  {isLoggedin && (
-                    <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
-                      {cartCount.length}
-                    </small>
-                  )}
-                  <i className="fa fa-shopping-cart" aria-hidden="true"></i>
-                </>
-              )}
+
+{
+  isLoggedin ? (
+    <>
+      {Array.isArray(cartCount) && cartCount.length > 0 && (
+        <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
+          {cartCount.length}
+        </small>
+      )}
+      <i className="fa fa-shopping-cart" aria-hidden="true"></i>
+    </>
+  ) : (
+    <>
+      {Array.isArray(localstorageCart) && localstorageCart.length > 0 && (
+        <small className="flex absolute top-[-5px] right-[-10px] justify-center items-center w-4 h-4 bg-red-600 rounded-full text-white">
+          {localstorageCart.length}
+        </small>
+      )}
+      <i className="fa fa-shopping-cart" aria-hidden="true"></i>
+    </>
+  )
+}
+
+
+              
             </Link>
           </div>
+           </div>
         </div>
 
         {/* Main Nav */}
@@ -262,11 +294,11 @@ useEffect(() => {
           <nav className="flex gap-x-5 justify-between items-center px-5 py-5 text-black">
             {/* Logo */}
             <div>
-              <h1 className="font-bold text-4xl dark:text-white"><Link to="/">Kharee<span className="text-brandOrange">do</span></Link></h1>
+              <h1 className="font-bold text-4xl dark:text-white"><Link to="/">Kharee<span className="lg:text-brandOrange text-white dark:text-brandOrange">do</span></Link></h1>
             </div>
 
             {/* Search */}
-            <div className="w-full xl:max-w-xl max-w-xs flex gap-2 relative">
+            <div className="w-full hidden xl:max-w-xl max-w-xs md:flex gap-2 relative">
               <input
                 onChange={search}
                 value={searchText}
@@ -381,8 +413,8 @@ useEffect(() => {
 
             {/* Hamburger Menu Button */}
             <div className="block lg:hidden">
-              <button aria-label="menu toggle" onClick={() => setIsMenuOpened(true)}>
-                <i className="fa fa-bars"></i>
+              <button aria-label="menu toggle  " className="text-white lg:text-black" onClick={() => setIsMenuOpened(true)}>
+                <i className="fa text-2xl fa-bars"></i>
               </button>
             </div>
           </nav>

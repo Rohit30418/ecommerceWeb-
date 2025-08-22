@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import AcoordionItem from './AcoordionItem';
+import AcoordionItem from './AccordionItem';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import gsap from 'gsap';
@@ -22,7 +22,6 @@ const Accordion = () => {
     duration:0.5,
     ease:"power1.out",
     stagger:0.2,
-    delay:1,
     scrollTrigger:{
       trigger:accordianRef.current,
       start:"top 80%",
@@ -73,7 +72,7 @@ const Accordion = () => {
 
 
   return (
-   <div className="container md:px-5 md:w-7/12 mx-auto ">
+   <div className="container sm:text-lg md:px-5 md:w-7/12 mx-auto ">
 
      <div ref={accordianRef}>
         {faqs?.map((item,ind)=>{

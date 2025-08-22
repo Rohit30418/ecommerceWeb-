@@ -33,7 +33,7 @@ const Heading = ({ title, textAlign }) => {
   return (
     <h2
   ref={headingRef}
-  className={`${textAlign === "text-left" ? "text-left" : "text-center"} text-lightText dark:text-darkText mb-8 lg:mb-16 font-bold text-4xl tinos-regular`}
+  className={`${textAlign === "text-left" ? "text-left" : "text-center"} text-lightText dark:text-darkText mb-8 lg:mb-16 font-bold md:text-3xl lg:text-4xl text-2xl tinos-regular`}
 >
   {title.split(" ").map((word, wi) => (
     <span key={wi} className="inline-block mr-2">
