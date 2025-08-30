@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { gsap } from 'gsap';
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
-import { Starrate } from '../Homeage/Starrate';
+import { Starrate } from '../../ui/Starrate';
 import { Link } from 'react-router-dom';
-import { db } from '../../firebase';
+import { db } from '../../services/firebase';
 import { collection, addDoc, doc } from 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 // import { removeToste, AddToste } from '../Redux/AddTosteSlice';
@@ -79,17 +79,10 @@ const ProductCard = ({ item }) => {
       alert(error.message);
     }
     }
-
-
-
-
-
   }
 
   return (
-
-    <>
-   
+   <>
     <div 
       className='w-full  h-100 card' 
       ref={imgRef}
@@ -111,8 +104,7 @@ const ProductCard = ({ item }) => {
             src={item?.thumbnail}
             className='w-full h-full mb-3 object-contain mx-auto ease-in-out duration-75'
             alt={item?.title}
-          />
-       
+          />       
         </div>
         <div className='py-4'>
           <p className='mb-3 text-sm sm:text-lg dark:text-darkText whitespace-nowrap  font-medium'>{item.title}</p>

@@ -1,37 +1,32 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './components/Redux/Store';
-import ErrorPage from './ErrorPage';
-import UserAuth from './components/UserAuth';
-import { LandingMain } from './components/Homeage/Landingmain';
-import Thanks from './components/Thanks';
-import Payment from './components/Payment';
-import MyOrder from './components/MyOrder';
-import FatchCartItems from './components/FatchCartItems';
-import ChatBot from './components/ChatBot';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import FatchOrderItems from './components/FatchOrderItems';
-import Register from './components/Register';
+import store from './Redux/Store';
+import ErrorPage from './pages/ErrorPage';
+import UserAuth from './features/auth/UserAuth';
+import { LandingMain } from './pages/homeage/Landingmain';
 import { ToastContainer } from 'react-toastify';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './common/ProtectedRoute';
 import Chatbot from './Chatbot';
-import Loader from './Loader';
+import Header from './components/layout/Header/Header';
+import Footer from './components/layout/Footer';
+import Loader from './ui/Loader';
 
 // Lazy-loaded components
-const AboutProduct = lazy(() => import('./components/AboutProduct'));
-const Login = lazy(() => import('./Login'));
+const AboutProduct = lazy(() => import('./pages/AboutProduct'));
+const Login = lazy(() => import('./features/auth/Login'));
 const ProductCategory = lazy(() => import('./components/Product/ProductCategory'));
-const Cart = lazy(() => import('./components/Cart/Cart'));
-
+const Cart = lazy(() => import('./features/cart/Cart'));
+const MyOrder=lazy(()=>import('./features/order/MyOrder'));
+const Payment=lazy(()=>import('./pages/Payment'));
+const Thanks=lazy(()=>import('./pages/Thanks'));
+const Register=lazy(()=>import('./features/auth/Register'));
 // Layout inside App
 const AppLayout = () => {
   return (
     <div className='bg-white dark:bg-darkBg'>
       <Header />
-      <main >
-      
+      <main >  
         <Chatbot />
         <Outlet />
       </main>
@@ -46,14 +41,10 @@ function App() {
     <Provider store={store}>
       <ToastContainer theme="colored" />
       <UserAuth />
-      <FatchCartItems />
-      <FatchOrderItems />    
-
       <div className="w-full">
         <Suspense
           fallback={<Loader/>}
         >
-          <ChatBot />
           <Routes>
             <Route path="/" element={<AppLayout />}>
               <Route index element={<LandingMain />} />

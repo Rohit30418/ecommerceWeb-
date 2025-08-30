@@ -1,5 +1,5 @@
 import {React,useEffect, useState} from "react"
-import { fetchApi } from "../fatchApi/fetchApi"
+import { fetchApi } from "../../services/fetchApi"
 import ProductCard from "./ProductCard";
 
 
@@ -16,6 +16,9 @@ const [page,setPage]=useState(1);
   ? Math.ceil(response.products.length / 6)
   : 0;
 
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [page]);
 
     return <>
       <div className='grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3'>

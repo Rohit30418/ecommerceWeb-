@@ -1,6 +1,7 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true, // Enable PWA features in development mode
+        enabled: true, // Enable PWA features in dev
       },
       manifest: {
         name: 'My PWA App',
@@ -17,6 +18,8 @@ export default defineConfig({
         description: 'My Progressive Web App built with Vite and React',
         theme_color: '#000000',
         background_color: '#ffffff',
+        display: 'standalone',
+        start_url: '/',
         icons: [
           {
             src: '/icon-192x192.png',
@@ -29,9 +32,12 @@ export default defineConfig({
             type: 'image/png',
           },
         ],
-        start_url: '/',
-        display: 'standalone',
       },
     }),
   ],
-});
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.js',
+  },
+})
