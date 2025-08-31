@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import Heading from '../../common/Heading';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import LazyImg from '../../common/LazyImg';
 gsap.registerPlugin(ScrollTrigger);
 
 const blogData = [
@@ -83,11 +84,8 @@ const TopBlogs = () => {
                       className='absolute w-full h-full top-0 left-0 bg-white opacity-0'
                       style={{ transform: 'translateY(-100%)' }}
                     ></span>
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="h-full rounded-md w-full object-cover"
-                    />
+                  
+                  <LazyImg  src={blog.image} className="h-full rounded-md w-full object-cover"/>
                   </div>
                   <div className="h-full mt-4 min-h-40 flex flex-col justify-between flex-grow">
                     <h3 className="text-lg font-semibold mb-2">{blog.title}</h3>

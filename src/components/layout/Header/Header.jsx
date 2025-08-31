@@ -115,7 +115,7 @@ const localstorageCart = JSON.parse(localStorage.getItem("cartItem")) || [];
     return (
       <>
         {text.substring(0, startIndex)}
-        <span className="text-blue-500">{text.substring(startIndex, endIndex)}</span>
+        <span className="text-brandOrange">{text.substring(startIndex, endIndex)}</span>
         {text.substring(endIndex)}
       </>
     );
@@ -186,7 +186,6 @@ useEffect(() => {
       });
   }
 
-console.log(localstorageCart.length);
 
   return (
     <>
@@ -275,10 +274,7 @@ console.log(localstorageCart.length);
       <i className="fa fa-shopping-cart" aria-hidden="true"></i>
     </>
   )
-}
-
-
-              
+}       
             </Link>
           </div>
            </div>
@@ -302,7 +298,7 @@ console.log(localstorageCart.length);
                 onChange={search}
                 value={searchText}
                 placeholder="Search Items Here"
-                className="text-black outline-none bg-white lg:bg-gray-200/30 p-2 rounded-md w-full"
+                className="text-black outline-none bg-white dark:text-white lg:bg-gray-200/30 p-2 rounded-md w-full"
                 type="search"
               />
               <i className="fa fa-search absolute right-[10px] top-[50%] translate-y-[-50%] text-black"></i>
@@ -322,7 +318,7 @@ console.log(localstorageCart.length);
                               setSearchText("");
                               setIsSearchDrop(false);
                             }}
-                            className={`text-black ${ind==keyboardIndex && "bg-brandOrange text-white "} px-2 rounded-md py-1 text-left w-full block`}
+                            className={`text-black ${ind==keyboardIndex && "bg-brandOrange/20  "} px-2 rounded-md py-1 text-left w-full block`}
                           >
                             {highlightText(submenu, searchText)}
                           </button>
@@ -373,7 +369,7 @@ console.log(localstorageCart.length);
                     }}
                   >
                     <button
-                      className={`dark:text-lightBg transition-all duration-300 hover:bg-brandOrange py-2 flex items-center gap-1 justify-between lg:justify-center lg:text-center text-left rounded-sm px-1 w-full`}
+                      className={`dark:text-lightBg transition-all duration-300 hover:bg-brandOrange hover:text-white py-2 flex items-center gap-1 justify-between lg:justify-center lg:text-center text-left rounded-sm px-1 w-full`}
                     >
                       {menuitem.main}
                       <i

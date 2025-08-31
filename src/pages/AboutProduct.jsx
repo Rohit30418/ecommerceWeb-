@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { fetchApi } from '../services/fetchApi';
 import { useParams } from 'react-router-dom';
 import { Starrate } from '../ui/Starrate';
-import { Link } from 'react-router-dom';
 import Relateditem from '../components/Product/Relateditem';
 import Heading from '../common/Heading';
+import InnerBanner from '../common/InnerBanner';
 
 const AboutProduct = () => {
   const { ProductId } = useParams();
@@ -26,19 +26,9 @@ const AboutProduct = () => {
 
   return (
     <>
-    
-        <div
-      className="h-[40vh] text-white text-4xl flex-col flex items-center justify-center bg-cover bg-no-repeat bg-center relative"
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-          url('https://demoxml.com/html/ecom/images/about-bg.png')
-        `,
-      }}
-    >
-      <h1 className="mb-4 font-bold capitalize">{response?.title}</h1>
-      <p className="text-sm capitalize"><Link to="/">Home</Link> . {response?.title}</p>
-    </div>
+    <InnerBanner title={response?.title}></InnerBanner>
+  
+      
     <div className="bg-gray-50 dark:bg-darkBg min-h-screen">
       <div className="container mx-auto px-4 py-16">
 

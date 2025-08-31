@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
+import FetchOrderItems from './FetchOrderItems';
+import InnerBanner from '../../common/InnerBanner';
 
 const statusSteps = ['Placed', 'Processing', 'Shipped', 'Delivered'];
 
@@ -10,7 +12,11 @@ const MyOrder = () => {
   const getStatusIndex = (status) => statusSteps.indexOf(status);
 
   return (
+   <>
+
+   <InnerBanner title="My Orders"></InnerBanner>
     <div className="p-6 max-w-6xl mx-auto">
+      <FetchOrderItems></FetchOrderItems>
       {/* <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">My Orders</h2> */}
 
       {cartItems.length === 0 ? (
@@ -86,7 +92,7 @@ const MyOrder = () => {
           })}
         </div>
       )}
-    </div>
+    </div></>
   );
 };
 

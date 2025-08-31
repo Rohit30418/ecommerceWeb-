@@ -42,8 +42,8 @@ const LandingPage = ({file}) => {
   const colorType = useSelector((state) => state.color.color);
 
   const colorOptions = [
-    "black",
-    'red',
+    "#000000",
+    '#f7411b',
     'blue',
     'green',
   ];
@@ -148,14 +148,14 @@ const LandingPage = ({file}) => {
         gl={{ preserveDrawingBuffer: true }}
       >
         <directionalLight
-          position={[25, 25, 35]}
-          intensity={colorType === '#000000' ? 14 : 12}
+          position={[20, 25, 35]}
+          intensity={colorType === '#000000' ? 14 : 20}
         />
         <directionalLight
           position={[-5, -35, -35]}
-          intensity={colorType === '#000000' ? 10 : 15}
+          intensity={colorType === '#000000' ? 10 : 20}
         />
-        <ambientLight intensity={5} />
+        <ambientLight intensity={50} />
         <Suspense fallback={null}>
           <OrbitControls enableZoom={false} ref={controlsRef} />
           <Model ref={modelRef} scene={scene} color={colorType} />

@@ -2,7 +2,6 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './Redux/Store';
-import ErrorPage from './pages/ErrorPage';
 import UserAuth from './features/auth/UserAuth';
 import { LandingMain } from './pages/homeage/Landingmain';
 import { ToastContainer } from 'react-toastify';
@@ -11,6 +10,7 @@ import Chatbot from './Chatbot';
 import Header from './components/layout/Header/Header';
 import Footer from './components/layout/Footer';
 import Loader from './ui/Loader';
+
 
 // Lazy-loaded components
 const AboutProduct = lazy(() => import('./pages/AboutProduct'));
@@ -21,6 +21,7 @@ const MyOrder=lazy(()=>import('./features/order/MyOrder'));
 const Payment=lazy(()=>import('./pages/Payment'));
 const Thanks=lazy(()=>import('./pages/Thanks'));
 const Register=lazy(()=>import('./features/auth/Register'));
+const ErrorPage=lazy(()=>import('./pages/ErrorPage'));
 // Layout inside App
 const AppLayout = () => {
   return (
@@ -37,9 +38,11 @@ const AppLayout = () => {
 
 function App() {
 
+
   return (
     <Provider store={store}>
-      <ToastContainer theme="colored" />
+      <Loader></Loader>
+      <ToastContainer theme="black" />
       <UserAuth />
       <div className="w-full">
         <Suspense

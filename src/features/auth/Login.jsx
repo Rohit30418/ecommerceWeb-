@@ -3,7 +3,7 @@ import { auth } from '../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import {toast } from 'react-toastify';
-
+import { uploadGuestCartToFirestore } from '../cart/uploadGuestCartToFirestore';
 
 const Login = () => {
   const [loginData, setLoginData] = useState({ userid: '', password: '' });
@@ -11,7 +11,6 @@ const Login = () => {
   const [isToastOpen, setIsToastOpen] = useState(false);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prev) => ({ ...prev, [name]: value }));
@@ -36,18 +35,17 @@ const Login = () => {
         setLoginData({ userid: '', password: '' });
         setIsLoading(false);
         toast.success("Login successful")
-        navigate('/');
+        if(localStorage.getItem("guest")){
+         await uploadGuestCartToFirestore(res.user.uid);
+          navigate('/cart');
+        }else{
+           navigate('/');
+        }
+       
       } catch (error) {
-     
         setErrorMsg({ general: error.message });
- 
-      }
-
-        
+      }    
     }
-
-        
-
   };
 
   useEffect(() => {

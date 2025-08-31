@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import FetchCartItems from './FetchCartItems';
+import InnerBanner from '../../common/InnerBanner';
 
 const Cart = () => {
   const [isCheckOut, setIsCheckOut] = useState(false);
@@ -17,6 +18,9 @@ const Cart = () => {
   const isloggedin = useSelector(state => state?.user?.isLoggedIn);
   const navigate = useNavigate();
 
+    useEffect(() => {
+           window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [])
   // Load cart: Firestore for logged-in, localStorage for guest
   useEffect(() => {
     if (isloggedin && uid) {
@@ -41,6 +45,7 @@ const Cart = () => {
 
   const placeOrder = async () => {
     if (!uid) {
+      localStorage.setItem("guest",JSON.stringify(true));
       navigate("/login");
       return;
     }
@@ -100,18 +105,25 @@ const Cart = () => {
 
   if (copyCartItems.length === 0) {
     return (
-      <div className='py-10 text-center'>
-        <h1><span className='text-8xl'>&#9785;</span></h1>
+      <div className='py-10 text-center dark:text-white'>
+        <h1><span className='text-8xl '>&#9785;</span></h1>
         <h1 className='text-2xl font-bold mb-8'> No items available</h1>
         <Link className='bg-brandOrange rounded-md text-white p-4' to="/">Explore Now</Link>
       </div>
     );
   }
 
+
+
   const TotalPages = Math.ceil(copyCartItems.length / 3);
 
+
+    
   return (
   <div>
+
+  <InnerBanner title="My Cart"></InnerBanner>
+
     <FetchCartItems></FetchCartItems>
        <div className="flex flex-col my-8 md:flex-row justify-between px-4 md:px-8 gap-6">
       {/* Left Column - Cart Items */}
@@ -153,7 +165,7 @@ const Cart = () => {
             </button>
 
             {/* Pagination */}
-            <div className="flex justify-center items-center mt-6 space-x-2">
+            {copyCartItems.length>3 && <div className="flex justify-center items-center mt-6 space-x-2">
               {Array.from({ length: TotalPages }).map((_, ind) => (
                 <button
                   key={ind}
@@ -163,7 +175,7 @@ const Cart = () => {
                   {ind + 1}
                 </button>
               ))}
-            </div>
+            </div>}
           </div>
         ) : (
           <div className="bg-white dark:text-white dark:bg-gray-400/20 shadow-md rounded-lg p-6 space-y-6">

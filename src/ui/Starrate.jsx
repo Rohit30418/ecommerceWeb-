@@ -7,7 +7,7 @@ export const Starrate = ({ rating }) => {
     } else if (i < rating) {
       stars.push(<i key={i} className="fas fa-star-half-alt text-brandOrange"></i>);
     } else {
-      stars.push(<i key={i} className="far fa-star text-gray-300"></i>);
+      stars.push(<i key={i} className="far fa-star text-gray-500"></i>);
     }
   }
 

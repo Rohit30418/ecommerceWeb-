@@ -5,6 +5,7 @@ import RangeSlider from '../../common/RangeSlider';
 import { useParams } from 'react-router-dom';
 import Cardloader from './Cardloader';
 import { Link } from 'react-router-dom';
+import InnerBanner from '../../common/InnerBanner';
 
 const ProductCategory = () => {
   // Removed unused 'category' state
@@ -149,19 +150,7 @@ const handleRangeChange = (value) => {
 
   return (
     <>
-
-    <div
-  className="h-[40vh] text-white text-4xl flex-col flex items-center justify-center bg-cover bg-no-repeat bg-center relative"
-  style={{
-    backgroundImage: `
-      linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-      url('https://demoxml.com/html/ecom/images/about-bg.png')
-    `,
-  }}
->
-  <h1 className="mb-4 font-bold capitalize">{Category}</h1>
-  <p className="text-sm capitalize"><Link to="/">Home</Link> . {Category}</p>
-</div>
+<InnerBanner title={Category}></InnerBanner>
 
 
       {isOverlayActive && (

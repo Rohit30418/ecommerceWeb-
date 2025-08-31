@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import Heading from '../../common/Heading';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import LazyImg from '../../common/LazyImg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -133,12 +133,10 @@ const Testimonial = () => {
               onMouseLeave={handleMouseLeave}
             >
               <div className="flex flex-col items-center text-center gap-4">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-20 h-20 rounded-full object-cover border-2"
-                  
-                />
+
+
+                <LazyImg   src={testimonial.image}  className="w-20 h-20 rounded-full object-cover border-2"></LazyImg>
+               
                 <p className="italic text-sm">"{testimonial.quote}"</p>
                 <div className="flex gap-1">{renderStars(testimonial.rating)}</div>
                 <div>
