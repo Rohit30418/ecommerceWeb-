@@ -21,7 +21,7 @@ const settings = {
   autoplaySpeed: 0, // continuous
   speed: 4000, // slow and smooth
   cssEase: 'linear', // linear easing
-  slidesToShow: 5,
+  slidesToShow: 6,
   slidesToScroll: 1,
   pauseOnHover: false,
   responsive: [
@@ -49,12 +49,12 @@ const settings = {
 const BrandLogos = () => {
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="mx-auto px-4  bg-brandOrange">
       <Slider {...settings}>
         {logos.map((brand, index) => (
           <div
             key={index}
-            className="p-4 mt-8 flex justify-center  items-center"
+            className="p-4 flex justify-center  items-center"
             
           >
             <div className="h-28 flex p-3 items-center bg-gray-200 dark:bg-gray-400/20 rounded-md py-8 justify-center w-full">

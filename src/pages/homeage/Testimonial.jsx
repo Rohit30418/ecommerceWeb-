@@ -8,47 +8,49 @@ gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
   {
-    quote: "I recently purchased a new laptop from this e-commerce site...",
-    name: "Jane D.",
+    quote: "I recently purchased a new laptop from this e-commerce site and the process was seamless!",
+    name: "Sophia L.",
     role: "Verified Buyer",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    image: "https://randomuser.me/api/portraits/women/28.jpg",
     rating: 5
   },
   {
-    quote: "Been shopping here for over a year. Love the variety and prices.",
-    name: "Mark S.",
+    quote: "Been shopping here for over a year. Love the variety, prices, and quick delivery.",
+    name: "David R.",
     role: "Loyal Customer",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
     rating: 4.5
   },
   {
-    quote: "Best shopping experience. Smooth checkout and fast delivery!",
-    name: "Emily R.",
-    role: "Satisfied Shopper",
-    image: "https://randomuser.me/api/portraits/women/47.jpg",
+    quote: "Fantastic experience! The checkout was easy and my order arrived earlier than expected.",
+    name: "Isabella M.",
+    role: "Happy Shopper",
+    image: "https://randomuser.me/api/portraits/women/33.jpg",
     rating: 5
   },
   {
-    quote: "Great deals! Saved a lot on home appliances. Super happy!",
-    name: "Alex P.",
-    role: "Bargain Hunter",
-    image: "https://randomuser.me/api/portraits/men/52.jpg",
+    quote: "Found everything I needed for my home office at great prices. Highly recommend!",
+    name: "Lucas T.",
+    role: "Bargain Finder",
+    image: "https://randomuser.me/api/portraits/men/41.jpg",
     rating: 4
   },
   {
-    quote: "Great deals! Saved a lot on home appliances. Super happy!",
-    name: "Alex P.",
-    role: "Bargain Hunter",
-    image: "https://randomuser.me/api/portraits/men/52.jpg",
-    rating: 4
-  },{
-    quote: "Great deals! Saved a lot on home appliances. Super happy!",
-    name: "Alex P.",
-    role: "Bargain Hunter",
-    image: "https://randomuser.me/api/portraits/men/52.jpg",
-    rating: 4
+    quote: "Customer support was amazing when I had a question about my order. Very impressed!",
+    name: "Olivia K.",
+    role: "Satisfied Customer",
+    image: "https://randomuser.me/api/portraits/women/19.jpg",
+    rating: 5
+  },
+  {
+    quote: "Great value for money and the product quality is top-notch. Will definitely shop again.",
+    name: "Ethan B.",
+    role: "Frequent Buyer",
+    image: "https://randomuser.me/api/portraits/men/27.jpg",
+    rating: 4.5
   }
 ];
+
 
 // Render Font Awesome stars
 const renderStars = (rating) => {
@@ -118,7 +120,7 @@ const Testimonial = () => {
         {/* Shared hover background */}
         <div
           ref={bgRef}
-          className="absolute bg-brandOrange/30 rounded-2xl z-0 pointer-events-none"
+          className="absolute bg-brandOrange/10 rounded-2xl z-0 pointer-events-none"
           style={{ width: 0, height: 0, top: 0, left: 0 }}
         />
 
@@ -135,7 +137,7 @@ const Testimonial = () => {
               <div className="flex flex-col items-center text-center gap-4">
 
 
-                <LazyImg   src={testimonial.image}  className="w-20 h-20 rounded-full object-cover border-2"></LazyImg>
+                <LazyImg alt={testimonial.name}  src={testimonial.image}  className="w-20 h-20 rounded-full object-cover border-2"></LazyImg>
                
                 <p className="italic text-sm">"{testimonial.quote}"</p>
                 <div className="flex gap-1">{renderStars(testimonial.rating)}</div>

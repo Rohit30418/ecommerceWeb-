@@ -9,10 +9,10 @@ export default {
     extend: {
       colors: {
         lightBg: '#F8FAFC',   // light background
-        darkBg: '#0B0F19',    // dark background
+        darkBg: '#121212',    // dark background
         lightText: '#1E293B', // light text
         darkText: '#F1F5F9',  // dark text
-        brandOrange: '#f7411b',
+        brandOrange: '#1d242d',
       
       },
     },

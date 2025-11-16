@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useEffect,useState } from 'react'
 
 
-const LazyImg = ({src,className}) => {
+const LazyImg = ({src,className,alt}) => {
 const [isLoading,setIsloading]=useState(true);
 const imgRef=useRef(null);
 useEffect(()=>{
@@ -26,7 +26,7 @@ return()=>{
 },[src])
 
   return (
-    <img ref={imgRef} src={src} className={className}  alt="img"/>
+    <img ref={imgRef} src={src} className={className}  alt={alt}/>
   )
 }
 

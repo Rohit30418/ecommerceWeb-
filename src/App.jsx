@@ -41,8 +41,7 @@ function App() {
 
   return (
     <Provider store={store}>
-      <Loader></Loader>
-      <ToastContainer theme="black" />
+      <ToastContainer />
       <UserAuth />
       <div className="w-full">
         <Suspense

@@ -67,7 +67,7 @@ const AboutProduct = () => {
           </div>
         </div>
       </div>
-      :<div className="flex flex-col md:flex-row gap-10 bg-gray-400/20 p-8 rounded-3xl ">
+      :<div className="flex flex-col md:flex-row gap-10 bg-gray-400/20 p-2 lg:p-8 rounded-3xl ">
           
       {/* Product Image */}
       <div className="md:w-5/12">
@@ -96,8 +96,8 @@ const AboutProduct = () => {
         {/* Product Table */}
         <div className="pt-6">
           <table className="w-full text-sm border-t border-gray-200">
-            <tbody>
-              {[
+ <tbody>
+{[
 [<i className="fas fa-tags mr-2 text-gray-500 dark:text-white"></i>, 'Brand', response?.brand],
 [<i className="fas fa-boxes mr-2 text-gray-500 dark:text-white"></i>, 'Category', response?.category],
 [<i className="fas fa-layer-group mr-2 text-gray-500 dark:text-white"></i>, 'Minimum Order Quantity', response?.minimumOrderQuantity],
@@ -112,9 +112,9 @@ const AboutProduct = () => {
 </tr>
 ))
 }
-            </tbody>
-          </table>
-        </div>
+</tbody>
+</table>
+</div>
 
         {/* Reviews */}
         <div className="mt-10">
@@ -142,8 +142,7 @@ const AboutProduct = () => {
     </div>
        }
         {/* Related Items */}
-        <div className="mt-20">
-       
+        <div className="mt-20">     
           <Heading title={"Related Items"}></Heading>
           <Relateditem category={response?.category} />
         </div>

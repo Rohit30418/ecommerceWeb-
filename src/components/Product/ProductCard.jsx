@@ -79,36 +79,71 @@ const ProductCard = ({ item }) => {
   return (
    <>
     <div 
-      className='w-full  h-100 card' 
-      ref={imgRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div
-        ref={iconsRef}
-        className='product_card rounded-md relative bg-gray-200 dark:bg-gray-400/10 p-2 sm:p-5 overflow-hidden block h-100 min-h-40 text-left'
+  className='w-full h-100 card' 
+  ref={imgRef}
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+>
+  <div
+    ref={iconsRef}
+    className='product_card rounded-md relative bg-gray-200 dark:bg-gray-400/10 p-2 sm:p-5 overflow-hidden block h-100 min-h-40 text-left'
+  >
+    <div className='flex p-1 flex-col icons gap-3 top-2 absolute z-10 right-2'>
+      
+      {/* Wishlist Button */}
+      <i 
+        aria-label="Add to wishlist" 
+        title="Add to wishlist"
+        className='fa fa-heart sm:text-lg text-white rounded-sm w-10 h-10 grid place-content-center translate-x-[60px] bg-brandOrange'
+      ></i>
+      
+      {/* Add to Cart Button */}
+      <i 
+        aria-label="Add to cart" 
+        title="Add to cart"
+        className='fa fa-cart-shopping sm:text-lg text-white w-10 rounded-sm h-10 grid place-content-center translate-x-[60px] cursor-pointer bg-brandOrange' 
+        onClick={AddToCart}
+      ></i>
+      
+      {/* Product Details Link */}
+      <Link 
+        to={`/ProductDetail/${item.id}`} 
+        aria-label={`View details for ${item?.title}`} 
+        title={`View details for ${item?.title}`}
       >
-        <div className='flex p-1 flex-col icons gap-3 top-2 absolute z-10 right-2'>
-          <i className='fa fa-heart sm:text-lg text-white rounded-sm w-10 h-10 grid place-content-center translate-x-[60px]  bg-brandOrange'  ></i>
-          <i aria-label='add to cart' className='fa fa-cart-shopping sm:text-lg text-white w-10 rounded-sm h-10 grid place-content-center translate-x-[60px] cursor-pointer bg-brandOrange' onClick={AddToCart}></i>
-          <Link to={`/ProductDetail/${item.id}`} al><i className='fa fa-eye rounded-sm sm:text-lg text-white w-10 h-10 grid place-content-center translate-x-[60px]  bg-brandOrange' ></i></Link>
-        </div>
-        <div className='  h-[150px] md:h-60 overflow-hidden bg-white rounded-md'>
-  
-         <LazyImg  src={item?.thumbnail}
-            className='w-full h-full mb-3 object-contain mx-auto ease-in-out duration-75'></LazyImg>
-             
-        </div>
-        <div className='py-4'>
-          <p className='mb-3 text-sm sm:text-lg dark:text-darkText whitespace-nowrap  font-medium'>{item.title}</p>
-          <div className='flex justify-between flex-wrap gap-2 items-center'>
-            <p className='text-sm'><i className="fas fa-rupee-sign text-brandOrange"></i> <span className='text-green-600 font-bold'>{Math.floor(Math.floor(item.price * 85)*(1-item.discountPercentage/100))}</span> <s className='text-red-600'>{Math.floor(item.price * 85)} </s>  </p>
-            {/* <p className='absolute top-2 text-white left-2 bg-brandOrange rounded-full p-1'> {item.discountPercentage}% off</p> */}
-            <Starrate rating={Math.floor(item?.rating) }  />
-          </div>
-        </div>
+        <i 
+          className='fa fa-eye rounded-sm sm:text-lg text-white w-10 h-10 grid place-content-center translate-x-[60px] bg-brandOrange' 
+          aria-hidden="true"
+        ></i>
+      </Link>
+    </div>
+
+    <div className='h-[150px] md:h-60 overflow-hidden bg-white rounded-md'>
+      <LazyImg 
+        alt={item?.title}  
+        src={item?.thumbnail}
+        className='w-full h-full mb-3 object-contain mx-auto ease-in-out duration-75'
+      />
+    </div>
+
+    <div className='py-4'>
+      <p className='mb-3 text-sm sm:text-lg dark:text-darkText whitespace-nowrap '>
+        {item.title}
+      </p>
+      <div className='flex justify-between flex-wrap gap-2 items-center'>
+        <p className='text-sm'>
+          <i className="fas fa-rupee-sign pr-1 inline-block text-brandOrange"></i> 
+          <span className='text-green-600 font-bold'>
+            {Math.floor(Math.floor(item.price * 85)*(1-item.discountPercentage/100))}
+          </span> 
+          <s className='text-red-600'>{Math.floor(item.price * 85)}</s>  
+        </p>
+        <Starrate rating={Math.floor(item?.rating)} />
       </div>
     </div>
+  </div>
+</div>
+
     </>
   );
 };

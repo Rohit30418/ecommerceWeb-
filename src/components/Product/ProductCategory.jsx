@@ -175,7 +175,7 @@ const handleRangeChange = (value) => {
         {/* Filter Panel */}
         <div className="md:w-3/12 dark:text-white rounded-lg px-4">
           <div className={`
-  fixed lg:static 
+  fixed category lg:static 
   top-0 bottom-0 right-0 
  bg-white lg:bg-gray-400/20 rounded-md p-4 w-7/12 md:w-full z-40 
   transition ease-in-out duration-300 
@@ -204,13 +204,13 @@ const handleRangeChange = (value) => {
             ))}
 
             <div className="mt-4 lg:hidden">
-              <button className="bg-red-500 p-2 mr-2" onClick={handleApplyFilter}>Apply</button>
-              <button className="bg-green-500 p-2" onClick={handleClearFilter}>Clear</button>
+              <button className="bg-green-500 rounded-md text-white p-2 mr-2" onClick={handleApplyFilter}>Apply</button>
+              <button className="bg-red-500 rounded-md text-white p-2" onClick={handleClearFilter}>Clear</button>
             </div>
           </div>
 
            {/* Sort Panel */}
-        <div className={`fixed lg:static ${isMobile?isMobileSortActive ? "translate-y-0" : "translate-y-full":"translate-y-0"}  bottom-0 bg-white dark:text-black dark:lg:text-white lg:bg-gray-400/20  shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md lg:w-full lg:mt-4 transition ease-in-out duration-300 p-3`}>
+        <div className={`fixed category lg:static ${isMobile?isMobileSortActive ? "translate-y-0" : "translate-y-full":"translate-y-0"}  bottom-0 bg-white dark:text-black dark:lg:text-white lg:bg-gray-400/20  shadow-sm z-40 w-[98%]  h-28 lg:h-auto left-[50%] translate-x-[-50%] lg:translate-x-[0%] rounded-md lg:w-full lg:mt-4 transition ease-in-out duration-300 p-3`}>
           <button className="block mb-4" onClick={lowToHighPrice}>
             Price Low to High <i className="fa-solid fa-arrow-up"></i>
           </button>
@@ -223,7 +223,7 @@ const handleRangeChange = (value) => {
        
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 md:w-9/12">
+        <div className="grid  gap-4 px-5 mb-5 grid-cols-2 xl:grid-cols-3 md:w-9/12">
           {loading ? (
             Array(6).fill().map((_, i) => <Cardloader key={i} />)
           ) : (

@@ -7,8 +7,8 @@ const Footer = () => {
     <div>
       <footer className=" text-white py-10 px-5 bg-brandOrange">
 
-	<div className="container grid grid-cols-2 mx-auto gap-x-3 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
-    <div><h1 className="text-4xl font-bold mb-5">Kharee<span className="text-black">do</span></h1>
+	<div className=" grid grid-cols-2 mx-auto gap-x-3 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
+    <div><h1 className="text-4xl font-bold mb-5"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Khareedo</h1>
     <div className="flex flex-col space-y-2 text-sm ">
 				<a rel="noopener noreferrer" href="#">GitHub</a>
 				<a rel="noopener noreferrer" href="#">Discord</a>

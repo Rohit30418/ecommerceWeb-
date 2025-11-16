@@ -29,13 +29,11 @@ const apologies = ["sorry","sry","my bad","apologies"];
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [puterLoaded, setPuterLoaded] = useState(false);
+  const [puterLoaded, setPuterLoaded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [lastMatches, setLastMatches] = useState([]);
   const [lastCategory, setLastCategory] = useState(null);
-
   const messagesEndRef = useRef(null);
   const user = useSelector((state) => state?.user?.userData);
 
@@ -82,15 +80,6 @@ const Chatbot = () => {
       setMessages([{ role: "bot", content: "Hello! I am Rohit. How can I assist you today?" }]);
     }
   }, [user]);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://js.puter.com/v2/";
-    script.async = true;
-    script.onload = () => setPuterLoaded(true);
-    document.body.appendChild(script);
-    return () => document.body.removeChild(script);
-  }, []);
 
   useEffect(scrollToBottom, [messages]);
 
@@ -205,15 +194,14 @@ const Chatbot = () => {
       const top3 = lastMatches.slice(0, 3).map(p => `- ${p.title} ($${p.price})`).join("<br/>");
       setMessages(prev => [...prev, { role: "bot", content: top3 || "Oops! Something went wrong. Please try again." }]);
     }
-
-    setLoading(false);
+  setLoading(false);
   };
 
   // ------------------ Render ------------------
   return (
     <>
       {isOpen && (
-        <div className="shadow-2xl z-50 bg-white w-80 max-w-full rounded-xl fixed bottom-24 right-8 flex flex-col overflow-hidden border border-gray-200">
+        <div className="shadow-2xl z-50 glass-card w-80 max-w-full rounded-xl fixed bottom-24 right-8 flex flex-col overflow-hidden border border-gray-200">
           <div className="bg-brandOrange py-3 px-4 flex items-center justify-between">
             <span className="font-bold text-white text-lg">ChatBot</span>
             <button className="text-white text-xl hover:text-red-300" onClick={() => setIsOpen(false)}>&times;</button>

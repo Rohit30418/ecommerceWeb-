@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
-import LandingPage from './Landingpage';
 import MainBody from './MainBody';
-
+import { lazy } from 'react';
+const LandingPage=lazy(()=>import('./Landingpage'));
 gsap.registerPlugin(TextPlugin, ScrollTrigger);
 
 export const LandingMain = () => {
