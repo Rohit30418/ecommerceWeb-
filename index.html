@@ -62,5 +62,32 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 <script src="https://js.puter.com/v2/"></script>
+<script>
+  // 🔥 Force remove ALL old service workers
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for (let reg of registrations) {
+        reg.unregister().then(() => {
+          console.log("Service worker removed:", reg);
+        });
+      }
+    });
+  }
+
+  // 🔥 Delete ALL old caches
+  if (window.caches) {
+    caches.keys().then(function(names) {
+      for (let name of names) {
+        caches.delete(name).then(() => {
+          console.log("Cache deleted:", name);
+        });
+      }
+    });
+  }
+
+  // 🔥 Force reload page WITHOUT cache
+  window.location.reload(true);
+</script>
+
   </body>
 </html>
