@@ -25,7 +25,8 @@ const Header = () => {
   const navigation = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  
+  const localstorageCart = JSON.parse(localStorage.getItem("cartItem")) || [];
+
   // Sticky Header
   useEffect(() => {
     function handleScroll() {
@@ -37,14 +38,14 @@ const Header = () => {
 
 
   // Mobile width check
-  useEffect(() => {
-    function checkWidth() {
-      setIsMobile(window.innerWidth <= 992);
-    }
-    checkWidth();
-    window.addEventListener("resize", checkWidth);
-    return () => window.removeEventListener("resize", checkWidth);
-  }, []);
+  // useEffect(() => {
+  //   function checkWidth() {
+  //     setIsMobile(window.innerWidth <= 992);
+  //   }
+  //   checkWidth();
+  //   window.addEventListener("resize", checkWidth);
+  //   return () => window.removeEventListener("resize", checkWidth);
+  // }, []);
 
   // Fetch user details from Firebase
   useEffect(() => {
@@ -182,7 +183,7 @@ const Header = () => {
 
           <div className="flex gap-5 items-center">
             {/* Dark Toggle */}
-            <button
+            {/* <button
               aria-label="modeToggle"
               className="text-white hidden text-xl"
               onClick={toggleDark}
@@ -192,7 +193,7 @@ const Header = () => {
               ) : (
                 <i aria-hidden="true" className="fa fa-moon"></i>
               )}
-            </button>
+            </button> */}
 
             {/* Profile / Login */}
             {!isLoggedin ? (

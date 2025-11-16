@@ -10,8 +10,6 @@ const UserAuth = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
-        
         // ✅ Only take serializable data
         const serializableUser = {
           uid: user.uid,
