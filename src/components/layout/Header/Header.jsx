@@ -12,8 +12,6 @@ const Header = () => {
   const user = useSelector((state) => state?.user?.userData);
   const isLoggedin = useSelector((state) => state?.user?.isLoggedIn);
   const cartCount = useSelector((state) => state?.user?.myCart || []);
-  const darkColor = useSelector((state) => state?.DarkColor?.DarkColor);
-
   const [userDetails, setUserDetails] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [isSticky, setSticky] = useState(false);
@@ -21,19 +19,12 @@ const Header = () => {
   const [isProfileDropActive, SetIsProfileDropActive] = useState(false);
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [isSearchDrop, setIsSearchDrop] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("darkMode") === "true" || false
-  );
   const [keyboardIndex, setKeyboardIndex] = useState(0);
 
   const headerRef = useRef(null);
   const navigation = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const localstorageCart = JSON.parse(localStorage.getItem("cartItem")) || [];
-
-  console.log(user);
   
   // Sticky Header
   useEffect(() => {
@@ -44,15 +35,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleDark = () => {
-    setDarkMode(!darkMode);
-    localStorage.setItem("darkMode", !darkMode);
-  };
-
-  useEffect(() => {
-    document.documentElement.classList.remove("dark", "light");
-    document.documentElement.classList.toggle(!darkMode ? "dark" : "light");
-  }, [darkMode]);
 
   // Mobile width check
   useEffect(() => {
@@ -198,11 +180,11 @@ const Header = () => {
             </span>
           </div>
 
-          <div className="hidden gap-5 items-center">
+          <div className="flex gap-5 items-center">
             {/* Dark Toggle */}
             <button
               aria-label="modeToggle"
-              className="text-white text-xl"
+              className="text-white hidden text-xl"
               onClick={toggleDark}
             >
               {darkMode ? (
