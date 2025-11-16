@@ -198,7 +198,7 @@ const Header = () => {
             </span>
           </div>
 
-          <div className="flex gap-5 items-center">
+          <div className="hidden gap-5 items-center">
             {/* Dark Toggle */}
             <button
               aria-label="modeToggle"
