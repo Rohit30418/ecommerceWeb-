@@ -68,7 +68,6 @@
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
       for (let reg of registrations) {
         reg.unregister().then(() => {
-          console.log("Service worker removed:", reg);
         });
       }
     });
@@ -79,14 +78,11 @@
     caches.keys().then(function(names) {
       for (let name of names) {
         caches.delete(name).then(() => {
-          console.log("Cache deleted:", name);
         });
       }
     });
   }
 
-  // 🔥 Force reload page WITHOUT cache
-  window.location.reload(true);
 </script>
 
   </body>
